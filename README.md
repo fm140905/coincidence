@@ -1,8 +1,15 @@
 ## Clone
 - Install `root`, `make` and `git`.
-- Open a new terminal and run `git clone xx`.
+- Open a new terminal and run 
+    ```bash
+    git clone https://github.com/fm140905/coincidence.git
+    ```
 - `cd` into the repo that you have just cloned.
-- Run `make clean && make` to compile the program.
+- Run 
+  ```bash
+  make clean && make
+  ```
+  to compile.
 
 ## Test
 - Open a new terminal under the root of the repo that you have just cloned, and run 
@@ -17,4 +24,7 @@
 ## Run
 - Copy the `bin/` diretory and `input.txt` to anywhere you like.
 - Edit the settings in `input.txt` if necessary.
-- Run `bin/main $(path-to-input.txt)`.
+- Run 
+    ```bash
+    bin/main $(path-to-input.txt)
+    ```
