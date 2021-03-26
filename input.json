@@ -1,0 +1,79 @@
+{
+    "ChannelSettings":
+    {
+        "Defaults":
+        {
+            "MaxNumPulses": 10000,
+            "Polarity": -1,
+            "Headers": [2,2,8,2,2,4,4],
+            "Length": 208,
+            "Dynamicrange": 2.0,
+            "TimeStep": 2,
+            "Resolution": 14,
+            "Offset": 8,
+            "SavePulses": 1,
+            "Calibration": {
+                "Integral": {
+                    "ON": 1,
+                    "Coefficient": 1.0
+                },
+                "Height": {
+                    "ON": 0,
+                    "Coefficient": 1.0
+                }
+            },
+            "Rejection": {
+                "ON": 1,
+                "ZeroSupression": 1,
+                "ClipRejection": 1
+            },
+            "EnergyCut": {
+                "ON": 0,
+                "LowerThreshold": 0.0,
+                "UpperThreshold": 500.0
+            },
+            "PSDCut": {
+                "ON": false,
+                "LazyCut": 1,
+                "LowerThreshold": 0.0,
+                "UpperThreshold": 1.0,
+                "QuadraticCut":  [0.0,0.0,0.5]
+            },
+            "Timing": {
+                "ON": true,
+                "Method": "DIACFD",
+                "Interpolation": 7,
+                "Fraction": 0.4,
+                "TimeDelay": 4 
+            },
+            "Gates": {
+                "LongGate": 300,
+                "ShortGate": 100,
+                "Trig": 48
+            }
+        },
+        "ChannelSpecific":[
+            {
+                "Num": 0,
+                "ON": 1,
+                "Path": "/home/ming/Downloads/pals/test/channel0.bin"
+            },
+            {
+                "Num": 1,
+                "ON": 1,
+                "Path": "/home/ming/Downloads/pals/test/channel0.bin"
+            }
+        ]
+    },
+    "CoincidenceSettings": 
+    {
+        "CoincidenceChannels": [0, 1],
+        "TimeWindow": 200,
+        "PlotTOF": {
+            "ON": 0,
+            "xmin": -10,
+            "xmax": 10,
+            "Bins": 100,
+        }
+    }
+}

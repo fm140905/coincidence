@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/mingf2/projects/coincidence/build/demo",
+  "command": "/bin/g++-9  -DVECCORE_ENABLE_VC -isystem /home/mingf2/root/include  -g -fPIE   -std=gnu++11 -o CMakeFiles/RootSimpleExample.dir/SimpleExample.cpp.o -c /home/mingf2/projects/coincidence/demo/SimpleExample.cpp",
+  "file": "/home/mingf2/projects/coincidence/demo/SimpleExample.cpp"
+}
+]

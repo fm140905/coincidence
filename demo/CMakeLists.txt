@@ -1,0 +1,2 @@
+add_executable(RootSimpleExample SimpleExample.cpp)
+target_link_libraries(RootSimpleExample PUBLIC ROOT::Physics)
