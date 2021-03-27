@@ -1,1 +1,0 @@
-/bin/g++-9  -g   CMakeFiles/RootSimpleExample.dir/SimpleExample.cpp.o  -o RootSimpleExample  -Wl,-rpath,/home/mingf2/root/lib /home/mingf2/root/lib/libPhysics.so.6.22.02 /home/mingf2/root/lib/libMatrix.so.6.22.02 /home/mingf2/root/lib/libMathCore.so.6.22.02 /home/mingf2/root/lib/libImt.so.6.22.02 /home/mingf2/root/lib/libCore.so.6.22.02 -Wl,-rpath-link,/home/mingf2/root/lib 

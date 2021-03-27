@@ -1,2 +1,0 @@
-/home/mingf2/projects/coincidence/build/CMakeFiles/rebuild_cache.dir
-/home/mingf2/projects/coincidence/build/CMakeFiles/edit_cache.dir

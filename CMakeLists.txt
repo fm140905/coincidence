@@ -8,4 +8,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(ROOT 6.22 CONFIG REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-# add_subdirectory(demo)
+
+enable_testing()
+add_subdirectory(googletest)
+add_subdirectory(test)
+add_subdirectory(src)

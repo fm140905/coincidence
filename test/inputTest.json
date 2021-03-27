@@ -16,7 +16,7 @@
             "RecordLength": 208,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
-            "SavePulses": 0, // number of pulses to be saved
+            "SavePulses": 0,
 
             "PreTrigger": 48,
             "Gates": {
@@ -61,7 +61,7 @@
             
             "Timing": {
                 "ON": false,
-                "Method": "DIACFD", //DCFD
+                "Method": "DIACFD",
                 "Interpolation": 7,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
@@ -71,19 +71,47 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/home/ming/Downloads/pals/test/channel0.bin"
+                "Path": "/home/ming/Downloads/pals/test/channel0.bin",
+                "MaxNumPulses": 100,
+                "Polarity": "positive",
+                "Dynamicrange": 1.0,
+                "Gates": {
+                    "PreGate": 50,
+                    "LongGate": 100
+                },
+                "Calibration": {
+                    "Integral": {
+                        "ON": false
+                    },
+                    "Height": {
+                        "ON": true,
+                        "Coefficient": 100.0
+                    }
+                }
             },
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/home/ming/Downloads/pals/test/channel1.bin"
+                "Path": "/home/ming/Downloads/pals/test/channel1.bin",
+                "PSDCut": {
+                    "ON": true,
+                    "LazyCut": false,
+    
+                    "QuadraticCut": true,
+                    "QuadracticCoefficients": [0.1,0.01,0.2]
+                },
+                
+                "Timing": {
+                    "ON": true,
+                    "Method": "DCFD"
+                }
             }
         ]
     },
     "CoincidenceSettings": 
     {
-        "ON": false,
-        "CoincidenceChannels": [0, 1],
+        "ON": true,
+        "CoincidenceChannels": [0, 8],
         "TimeWindow": 200,
         "SaveTimeDifference": true,
         "PlotTOF": {
