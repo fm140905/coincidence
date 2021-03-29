@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 12:41:05
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-26 23:28:00
+ * @LastEditTime: 2021-03-29 00:08:38
  */
 #pragma once
 
@@ -12,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <numeric>
 
 #include "TFile.h"
 
@@ -23,17 +24,24 @@
 
 struct ChannelSettings
 {
+private:
+    /*data*/
+public:
+    int getSampleNumber();
     std::string path;
     uint channelNumber=0;
     bool processOutput=false;
     
     ULong64_t maxNumPulses=-1;
     std::string polarity;
+    int polarityCoef=-1;
     std::vector<int> headers;
     std::vector<bool> saveHeaders;
     int sampleSize=4;
+    int eventSize=0;
     int length=288;
     double dynamicRange=0.5;
+    double lsb2voltage=1;
     int timestep=4;
     int resolution=12;
     int offset=16;
@@ -71,6 +79,32 @@ struct ChannelSettings
     double cfdFraction=0.2;
     int timeDelay=6;
     int interpolationPoints=1;
+
+    bool plotGoodPulses=false;
+    int goodNumber=0;
+    bool plotBadPulses=false;
+    int badNumber=0;
+
+    bool plotPHD=false;
+    bool plotPHDCalibrated=false;
+    double PHDXmin=0.0;
+    double PHDXmax=0.0;
+    int PHDBins=1;
+    bool plotPID=false;
+    bool plotPIDCalibrated=false;
+    double PIDXmin=0.0;
+    double PIDXmax=0.0;
+    int PIDBins=1;
+
+    bool plotPSD=false;
+    bool plotPSDCalibrated=false;
+    double PSDXmin=0.0;
+    double PSDXmax=0.0;
+    double PSDYmin=0.0;
+    double PSDYmax=0.0;
+    int PSDXBins=1;
+    int PSDYBins=1;
+
 };
 
 struct CoincidenceSetting

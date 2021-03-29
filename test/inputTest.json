@@ -13,7 +13,6 @@
             "Headers": [2,2,8,2,2,4,4],
             "SaveHeaders": [false, false, false, false, false, false, false],
             "SampleSize": 2,
-            "RecordLength": 208,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
             "SavePulses": 0,
@@ -65,13 +64,52 @@
                 "Interpolation": 7,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
+            },
+
+            "PlotPulses":{
+                "Good pulses": {
+                    "ON": true,
+                    "Number": 100
+                },
+                "Rejected pulses": {
+                    "ON": true,
+                    "Number": 100
+                }
+            },
+
+            "Plot Pulse Height Distribution": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "Bins": 100
+            },
+
+            "Plot Pulse Integral Distribution": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "Bins": 100
+            },
+
+            "Plot PSD": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "XBins": 100,
+                "ymin": 0,
+                "ymax": 1.0,
+                "YBins": 100
             }
+
         },
         "ChannelSpecific":[
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/home/ming/Downloads/pals/test/channel0.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
                 "MaxNumPulses": 100,
                 "Polarity": "positive",
                 "Dynamicrange": 1.0,
@@ -92,7 +130,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/home/ming/Downloads/pals/test/channel1.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
                 "PSDCut": {
                     "ON": true,
                     "LazyCut": false,

@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-26 23:29:15
+ * @LastEditTime: 2021-03-29 00:13:01
  */
 
 #include <gtest/gtest.h>
@@ -36,7 +36,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     const ChannelSettings& ch1 = settings.channelSettings[1];
 
     EXPECT_EQ(ch0.channelNumber, 0);
-    EXPECT_STREQ(ch0.path.c_str(), "/home/ming/Downloads/pals/test/channel0.bin");
+    EXPECT_STREQ(ch0.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel0.bin");
     EXPECT_TRUE(ch0.processOutput);
     EXPECT_EQ(ch0.maxNumPulses, 100);
     EXPECT_EQ(ch0.channelNumber, 0);
@@ -54,15 +54,15 @@ TEST(getInputTest, getSpecificChannelSetting)
         EXPECT_FALSE(ch0.saveHeaders[i]);
     }
     EXPECT_EQ(ch0.sampleSize, 2);
-    EXPECT_EQ(ch0.length, 208);
+    EXPECT_EQ(ch0.length, 104);
     EXPECT_DOUBLE_EQ(ch0.dcOffset, 0.2);
     EXPECT_EQ(ch0.offset, 8);
     EXPECT_EQ(ch0.savePulses, 0);
 
-    EXPECT_EQ(ch0.preTrig, 48);
-    EXPECT_EQ(ch0.preGate, 50);
-    EXPECT_EQ(ch0.shortGate, 100);
-    EXPECT_EQ(ch0.longGate, 100);
+    EXPECT_EQ(ch0.preTrig, 24);
+    EXPECT_EQ(ch0.preGate, 0);
+    EXPECT_EQ(ch0.shortGate, 50);
+    EXPECT_EQ(ch0.longGate, 50);
     
     EXPECT_TRUE(ch0.calibrationHeight);
     EXPECT_DOUBLE_EQ(ch0.calibrationHeightCoefficient, 100.0);
@@ -98,7 +98,7 @@ TEST(getInputTest, getSpecificChannelSetting)
 
 
     // channel 1
-    EXPECT_STREQ(ch1.path.c_str(), "/home/ming/Downloads/pals/test/channel1.bin");
+    EXPECT_STREQ(ch1.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
     EXPECT_EQ(ch1.maxNumPulses, 10000);
     EXPECT_EQ(ch1.channelNumber, 1);
@@ -115,15 +115,15 @@ TEST(getInputTest, getSpecificChannelSetting)
         EXPECT_FALSE(ch1.saveHeaders[i]);
     }
     EXPECT_EQ(ch1.sampleSize, 2);
-    EXPECT_EQ(ch1.length, 208);
+    EXPECT_EQ(ch1.length, 104);
     EXPECT_DOUBLE_EQ(ch1.dcOffset, 0.2);
     EXPECT_EQ(ch1.offset, 8);
     EXPECT_EQ(ch1.savePulses, 0);
 
-    EXPECT_EQ(ch1.preTrig, 48);
-    EXPECT_EQ(ch1.preGate, 20);
-    EXPECT_EQ(ch1.shortGate, 100);
-    EXPECT_EQ(ch1.longGate, 300);
+    EXPECT_EQ(ch1.preTrig, 24);
+    EXPECT_EQ(ch1.preGate, 14);
+    EXPECT_EQ(ch1.shortGate, 64);
+    EXPECT_EQ(ch1.longGate, 104);
     
     EXPECT_FALSE(ch1.calibrationHeight);
     EXPECT_DOUBLE_EQ(ch1.calibrationHeightCoefficient, 1.0);
@@ -156,6 +156,75 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_DOUBLE_EQ(ch1.cfdFraction, 0.4);
     EXPECT_EQ(ch1.timeDelay, 4);
     EXPECT_EQ(ch1.interpolationPoints, 7);    
+}
+
+TEST(getInputTest, plotPHDPID)
+{
+    std::string f("/home/mingf2/projects/coincidence/test/inputTest.json");
+    const InputParameters settings(f);
+    EXPECT_EQ(settings.channelSettings.size(), 2);
+    const ChannelSettings& ch0 = settings.channelSettings[0];
+    const ChannelSettings& ch1 = settings.channelSettings[1];
+    
+    EXPECT_TRUE(ch0.plotGoodPulses);
+    EXPECT_TRUE(ch1.plotGoodPulses);
+    EXPECT_TRUE(ch0.plotBadPulses);
+    EXPECT_TRUE(ch1.plotBadPulses);
+    EXPECT_EQ(ch0.goodNumber, 100);
+    EXPECT_EQ(ch1.goodNumber, 100);
+    EXPECT_EQ(ch0.badNumber, 100);
+    EXPECT_EQ(ch1.badNumber, 100);
+
+    EXPECT_TRUE(ch0.plotPHD);
+    EXPECT_TRUE(ch0.plotPHDCalibrated);
+    EXPECT_DOUBLE_EQ(ch0.PHDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch0.PHDXmax, 1000.0);
+    EXPECT_EQ(ch0.PHDBins, 100);
+    EXPECT_TRUE(ch0.plotPID);
+    EXPECT_TRUE(ch0.plotPIDCalibrated);
+    EXPECT_DOUBLE_EQ(ch0.PIDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch0.PIDXmax, 1000.0);
+    EXPECT_EQ(ch0.PIDBins, 100);
+
+    EXPECT_TRUE(ch1.plotPHD);
+    EXPECT_TRUE(ch1.plotPHDCalibrated);
+    EXPECT_DOUBLE_EQ(ch1.PHDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch1.PHDXmax, 1000.0);
+    EXPECT_EQ(ch1.PHDBins, 100);
+    EXPECT_TRUE(ch1.plotPID);
+    EXPECT_TRUE(ch1.plotPIDCalibrated);
+    EXPECT_DOUBLE_EQ(ch1.PIDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch1.PIDXmax, 1000.0);
+    EXPECT_EQ(ch1.PIDBins, 100);
+
+}
+
+TEST(getInputTest, plotPSD)
+{
+    std::string f("/home/mingf2/projects/coincidence/test/inputTest.json");
+    const InputParameters settings(f);
+    EXPECT_EQ(settings.channelSettings.size(), 2);
+    const ChannelSettings& ch0 = settings.channelSettings[0];
+    const ChannelSettings& ch1 = settings.channelSettings[1];
+
+    EXPECT_TRUE(ch0.plotPSD);
+    EXPECT_TRUE(ch0.plotPSDCalibrated);
+    EXPECT_DOUBLE_EQ(ch0.PSDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch0.PSDXmax, 1000.0);
+    EXPECT_EQ(ch0.PSDXBins, 100);
+    EXPECT_DOUBLE_EQ(ch0.PSDYmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch0.PSDYmax, 1.0);
+    EXPECT_EQ(ch0.PSDYBins, 100);
+
+    EXPECT_TRUE(ch1.plotPSD);
+    EXPECT_TRUE(ch1.plotPSDCalibrated);
+    EXPECT_DOUBLE_EQ(ch1.PSDXmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch1.PSDXmax, 1000.0);
+    EXPECT_EQ(ch1.PSDXBins, 100);
+    EXPECT_DOUBLE_EQ(ch1.PSDYmin, 0.0);
+    EXPECT_DOUBLE_EQ(ch1.PSDYmax, 1.0);
+    EXPECT_EQ(ch1.PSDYBins, 100);
+
 }
 
 TEST(getInputTest, getCoincidenceSetting)

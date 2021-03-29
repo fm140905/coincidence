@@ -1,0 +1,146 @@
+// Post processing input in json format
+// use //... and /* ... */ for single-line and multi-line comments
+{
+    "ChannelSettings":
+    {
+        "Defaults":
+        {
+            "MaxNumPulses": 100000,
+            "Polarity": "negative",
+            "Dynamicrange": 2.0,
+            "TimeStep": 2,
+            "Resolution": 14,
+            "Headers": [2,2,8,2,2,4,4],
+            "SaveHeaders": [false, false, false, false, false, false, false],
+            "SampleSize": 2,
+            "DCOffset": 0.2,
+            "BaselineSamples": 8,
+            "SavePulses": 0, // number of pulses to be saved
+
+            "PreTrigger": 72,
+            "Gates": {
+                "PreGate": 20,
+                "ShortGate":30,
+                "LongGate": 100
+            },
+            
+            "Calibration": {
+                "Integral": {
+                    "ON": true,
+                    "Coefficient": 100.0
+                },
+                "Height": {
+                    "ON": false,
+                    "Coefficient": 100.0
+                }
+            },
+
+            "Rejection": {
+                "ON": false,
+                "ZeroSupression": true,
+                "LowVoltageThreshold": 0.05,
+                "ClipRejection": true
+            },
+
+            "EnergyCut": {
+                "ON": false,
+                "LowerThreshold": 0.0,
+                "UpperThreshold": 500.0
+            },
+
+            "PSDCut": {
+                "ON": false,
+                "LazyCut": true,
+                "LowerThreshold": 0.0,
+                "UpperThreshold": 1.0,
+
+                "QuadraticCut": false,
+                "QuadracticCoefficients": [0.0,0.0,0.5]
+            },
+            
+            "Timing": {
+                "ON": false,
+                "Method": "DIACFD", //DCFD
+                "Interpolation": 7,
+                "Fraction": 0.4,
+                "TimeDelay": 4 
+            },
+
+            "PlotPulses":{
+                "Good pulses": {
+                    "ON": true,
+                    "Number": 100
+                },
+                "Rejected pulses": {
+                    "ON": true,
+                    "Number": 100
+                }
+            },
+
+            "Plot Pulse Height Distribution": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "Bins": 100
+            },
+
+            "Plot Pulse Integral Distribution": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "Bins": 100
+            },
+
+            "Plot PSD": {
+                "ON":true,
+                "Calibrated": true,
+                "xmin": 0,
+                "xmax": 1000,
+                "XBins": 100,
+                "ymin": 0,
+                "ymax": 1.0,
+                "YBins": 100
+            }
+        },
+        "ChannelSpecific":[
+            {
+                "ChannelNumber": 0,
+                "MaxNumPulses": 100,
+                "ON": true,
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
+                "Calibration": {
+                    "Integral": {
+                        "ON": true,
+                        "Coefficient": 152.0356
+                    }
+                }
+            },
+            {
+                "ChannelNumber": 1,
+                "ON": true,
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
+                "Calibration": {
+                    "Integral": {
+                        "ON": true,
+                        "Coefficient": 151.746
+                    }
+                }
+            }
+        ]
+    },
+    "CoincidenceSettings": 
+    {
+        "ON": false,
+        "CoincidenceChannels": [0, 1],
+        "TimeWindow": 200,
+        "SaveTimeDifference": true,
+        "PlotTOF": {
+            "ON": true,
+            "xmin": -10,
+            "xmax": 10,
+            "Bins": 100
+        }
+    }
+}

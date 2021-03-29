@@ -13,7 +13,6 @@
             "Headers": [2,2,8,2,2,4,4],
             "SaveHeaders": [false, false, false, false, false, false, false],
             "SampleSize": 2,
-            "RecordLength": 208,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
             "SavePulses": 0, // number of pulses to be saved
