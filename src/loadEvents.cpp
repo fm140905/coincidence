@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 23:41:11
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 01:04:07
+ * @LastEditTime: 2021-03-29 20:36:24
  */
 #include "loadEvents.h"
 
@@ -174,6 +174,7 @@ int Event::PSDCut()
 
 int Channel::loadEvents()
 {
+    voltage.resize(channelSetting.length, 0);
     // buffer size = 64MB
     ULong_t bufSize = 1024*1024*64 / channelSetting.eventSize;
     bufSize = bufSize * channelSetting.eventSize;
@@ -206,19 +207,25 @@ int Channel::loadEvents()
         // extract pulses
         while (bufIndex < bufSize && currentNumber < channelSetting.maxNumPulses)
         {
-            std::vector<double> voltage(channelSetting.length, 0);
             Event newPulse(channelSetting);
             newPulse.parse(buffer, bufIndex, voltage);
             currentNumber++;
             if (newPulse.isGood)
             {
-                events.push_back(newPulse);
                 goodCounts++;
                 if (goodCounts <= channelSetting.goodNumber ||
                     goodCounts <= channelSetting.savePulses)
                 {
                     goodPulses.push_back(voltage);
                 }
+                if (channelSetting.timing)
+                {
+                    std::vector<double> interpolated(channelSetting.windowSize * channelSetting.interpolationPoints, 0);
+                    sincInterpolation(interpolated);
+                    // interpPulses.push_back(interpolated);
+                    timing(newPulse);
+                }
+                events.push_back(newPulse);
             }
             else
             {
@@ -240,15 +247,125 @@ int Channel::loadEvents()
     return 0;
 }
 
-int Channel::getPulseGraph(const std::vector<std::vector<double_t>>& pulses, const UInt_t& pulseNum, 
-                           TMultiGraph* multiGraph, const std::string& plotName)
+int Channel::sincInterpolation(std::vector<Double_t>& interpolated)
 {
-    const UInt_t& N = channelSetting.length;
+    for (std::size_t i = 0; i < interpolated.size(); i++)
+    {
+        interpolated[i] = getInterpPoint(i);
+    }
+    
+    return 0;
+}
+
+double Channel::getInterpPoint(const int& i)
+{
+    int k = i % channelSetting.interpolationPoints;
+    int j = i / channelSetting.interpolationPoints + channelSetting.startIndex;
+    if (k==0)
+    {
+        return voltage[j];
+    }
+    else
+    {
+        double y(0);
+        for (int l = 0; l < channelSetting.tsincWidth; l++)
+        {
+            y = y + voltage[j-l] * channelSetting.sincCoefs[l * channelSetting.interpolationPoints + k] 
+                                      + voltage[j + 1 + l] * channelSetting.sincCoefs[(l + 1)*channelSetting.interpolationPoints - k];
+        }
+        return y;
+    }
+}
+
+int Channel::getInterpMax(double& ymax, int& imax)
+{
+    imax = std::max_element(voltage.begin(), voltage.end()) - voltage.begin();
+    int low = (voltage[imax - 1] > voltage[imax + 1]) ? (imax - 1) : imax;
+    int high = (voltage[imax - 1] > voltage[imax + 1]) ? imax : (imax + 1);
+    low = (low - channelSetting.startIndex) * channelSetting.interpolationPoints;
+    high = (high - channelSetting.startIndex) * channelSetting.interpolationPoints;
+    imax = findMax(low, high);
+    ymax = getInterpPoint(imax);
+    return 0;
+}
+
+int Channel::findMax(int low, int high)
+{
+    if (low > high)
+    {
+        return low;
+    }
+    if (high - low < 2) 
+    {
+        return (getInterpPoint(low) > getInterpPoint(high)) ? low : high;
+    }
+    int mid = (low+high) / 2;
+    int left = findMax(low, mid-1);
+    int right = findMax(mid+1, high);
+    return (getInterpPoint(left) < getInterpPoint(mid)) && (getInterpPoint(right) < getInterpPoint(mid)) ? mid : (getInterpPoint(left) > getInterpPoint(right) ? left : right);
+}
+
+int Channel::timing(Event& event)
+{
+    // // DIACFD
+    double ymax(0);
+    int imax(0);
+    getInterpMax(ymax, imax);
+    const double& f = channelSetting.cfdFraction;
+    const int& d = channelSetting.cfdFraction;
+
+    // solve f * y[i] - y[i+\delta] = 0
+    int low;
+    if (f * ymax - getInterpPoint(imax + d) > 0)
+    {
+        // zero crossing point inside (imax, imax + delta)
+        // binary search
+        low = findZeroBinary(imax, imax +d);
+    }
+    else
+    {
+        low = findZeroBinary(0, imax);
+    }
+    // coarse time stamp at startIndex
+    ULong64_t coarseTimeStamp = (event.timeStampHeader / 2000  - channelSetting.preGate + channelSetting.startIndex) * 2;
+    ymax =  getInterpPoint(low) / (getInterpPoint(low) - getInterpPoint(low + 1)) + low; 
+    event.timeStampDACFD = ymax * channelSetting.findTimeReso + coarseTimeStamp;
+    return 0;
+}
+
+int Channel::findZeroBinary(int low, int high)
+{
+    // base case
+    if (high - low < 2)
+    {
+        return low;
+    }
+    int mid = (low + high) / 2;
+    if (getInterpPoint(mid) > 0)
+    {
+        return findZeroBinary(mid, high);
+    }
+    else
+    {
+        return findZeroBinary(low, mid);
+    }
+}
+int Channel::getPulseGraph(const std::vector<std::vector<double_t>>& pulses, const UInt_t& pulseNum, 
+                           TMultiGraph* multiGraph, const std::string& plotName, const int& pts)
+{
+    UInt_t N = channelSetting.length;
+    if (pulses.size()!=0)
+    {
+        N = pulses[0].size();
+        /* code */
+    }
+    
     Double_t x_vals[N];
     Double_t gateHeight(0);
     for (int i = 0; i < N; i++)
     {
         x_vals[i] = channelSetting.timestep * i;
+        x_vals[i] /= pts;
     }
     
     const UInt_t& M = (pulseNum < pulses.size()) ? pulseNum : pulses.size();
@@ -317,6 +434,13 @@ int Channel::getBadPulseGraph(const std::string& plotName)
 {
     getPulseGraph(badPulses, channelSetting.badNumber, &badPulseGraph, plotName);
 
+    return 0;
+}
+
+int Channel::getinterpPulseGraph(const std::string& plotName)
+{
+    // interpPulses = std::vector<std::vector<Double_t>>(2, channelSetting.sincCoefs);
+    getPulseGraph(interpPulses, interpPulses.size(), &interpPulseGraph, plotName, channelSetting.interpolationPoints);
     return 0;
 }
 

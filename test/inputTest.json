@@ -59,8 +59,8 @@
             },
             
             "Timing": {
-                "ON": false,
-                "Method": "DIACFD",
+                "ON": true,
+                "Method": "DIACFD", //DCFD
                 "Interpolation": 7,
                 "Fraction": 0.4,
                 "TimeDelay": 4 

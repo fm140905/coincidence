@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-28 17:40:06
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 01:05:35
+ * @LastEditTime: 2021-03-29 19:26:56
  */
 
 #include <gtest/gtest.h>
@@ -46,7 +46,7 @@ TEST_F(ChannelTest, loadEvents)
     EXPECT_EQ(channel0->events[99].timeStampHeader, 1664117388189);
     EXPECT_NEAR(channel0->events[99].height, 0.0948391631, 1e-6);
 
-    EXPECT_EQ(channel1->events.size(), 100000);
+    EXPECT_EQ(channel1->events.size(), 100);
     EXPECT_EQ(channel1->events[0].timeStampHeader, 48127162330);
     EXPECT_NEAR(channel1->events[0].height, 1.00167859, 1e-6);
     EXPECT_EQ(channel1->events[1].timeStampHeader, 48623176718);
@@ -142,3 +142,21 @@ TEST_F(ChannelTest, plotPSDTest)
     PSDCanvasCH1->DrawClone();
     PSDCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/PSD - channel 1.png");
 }
+
+// TEST_F(ChannelTest, interpolationTest)
+// {
+//     std::string plotname = "Interpolated pulses - channel " + std::to_string(settings->channelSettings[0].channelNumber);
+//     std::unique_ptr<TCanvas> goodPulseCanvasCH0(new TCanvas(plotname.c_str(), "Interpolated pulses", 200, 10, 700, 500));
+//     channel0->getinterpPulseGraph(plotname);
+//     channel0->interpPulseGraph.DrawClone("A PLC PMC");
+//     goodPulseCanvasCH0->DrawClone();
+//     goodPulseCanvasCH0->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Interpolated pulses - channel 0.png");
+
+//     plotname = "Interpolated pulses - channel " + std::to_string(settings->channelSettings[1].channelNumber);
+//     std::unique_ptr<TCanvas> goodPulseCanvasCH1(new TCanvas(plotname.c_str(), "Interpolated pulses", 200, 10, 700, 500));
+//     channel1->getinterpPulseGraph(plotname);
+//     channel1->interpPulseGraph.DrawClone("A PLC PMC");
+//     goodPulseCanvasCH1->DrawClone();
+//     goodPulseCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Interpolated pulses - channel 1.png");
+
+// }

@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 12:31:48
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-28 23:51:30
+ * @LastEditTime: 2021-03-29 20:37:20
  */
 
 #pragma once
@@ -60,14 +60,22 @@ class Channel
 private:
     const ChannelSettings& channelSetting;
     int getPulseGraph(const std::vector<std::vector<double_t>>& pulses, const UInt_t& pulseNum, 
-                           TMultiGraph* multiGraph, const std::string& plotName);
+                           TMultiGraph* multiGraph, const std::string& plotName,
+                           const int& pts=1);
+    std::vector<Double_t> sincCoeffs;
+    int sincInterpolation(std::vector<Double_t>& interpolated);
+    double getInterpPoint(const int& i);
+    int getInterpMax(double& ymax, int& imax);
+    int findMax(int low, int high);
+    int findZeroBinary(int low, int high);
 public:
+    std::vector<double> voltage;
     std::vector<Event> events;
     Channel(const ChannelSettings& sett): channelSetting(sett) {}
     // ~Channel();
     int loadEvents();
 
-    int timing();
+    int timing(Event& event);
     
     std::vector<std::vector<double_t>> goodPulses;
     std::vector<std::vector<double_t>> badPulses;
@@ -75,6 +83,10 @@ public:
     int getGoodPulseGraph(const std::string& plotName);
     TMultiGraph badPulseGraph;
     int getBadPulseGraph(const std::string& plotName);
+    // for bedug
+    std::vector<std::vector<double_t>> interpPulses;
+    TMultiGraph interpPulseGraph;
+    int getinterpPulseGraph(const std::string& plotName);
     
     TH1D PHD;
     int getPHD(const std::string& plotName);
@@ -83,16 +95,5 @@ public:
 
     TH2D PSD;
     int getPSD(const std::string& plotName);
-
-};
-
-
-class CoincidenceChannel
-{
-private:
-    /* data */
-public:
-    // CoincidenceChannel(/* args */);
-    // ~CoincidenceChannel();
 };
 

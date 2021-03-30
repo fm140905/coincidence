@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 00:13:01
+ * @LastEditTime: 2021-03-29 20:32:47
  */
 
 #include <gtest/gtest.h>
@@ -89,13 +89,6 @@ TEST(getInputTest, getSpecificChannelSetting)
     {
         EXPECT_DOUBLE_EQ(ch0.quadraticCoefficients[i], coefs[i]);
     }
-    
-    EXPECT_FALSE(ch0.timing);
-    EXPECT_STREQ(ch0.timingMethod.c_str(), "DIACFD");
-    EXPECT_DOUBLE_EQ(ch0.cfdFraction, 0.4);
-    EXPECT_EQ(ch0.timeDelay, 4);
-    EXPECT_EQ(ch0.interpolationPoints, 7);
-
 
     // channel 1
     EXPECT_STREQ(ch1.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel1.bin");
@@ -150,14 +143,51 @@ TEST(getInputTest, getSpecificChannelSetting)
     {
         EXPECT_DOUBLE_EQ(ch1.quadraticCoefficients[i], coefs[i]);
     }
-    
+}
+
+TEST(getInputTest, timingTest)
+{
+    std::string f("/home/mingf2/projects/coincidence/test/inputTest.json");
+    const InputParameters settings(f);
+    EXPECT_EQ(settings.channelSettings.size(), 2);
+    const ChannelSettings& ch0 = settings.channelSettings[0];
+    const ChannelSettings& ch1 = settings.channelSettings[1];
+
+    EXPECT_TRUE(ch0.timing);
+    EXPECT_STREQ(ch0.timingMethod.c_str(), "DIACFD");
+    EXPECT_DOUBLE_EQ(ch0.cfdFraction, 0.4);
+    EXPECT_EQ(ch0.timeDelay, 16);
+    EXPECT_EQ(ch0.interpolationPoints, 8);
+    EXPECT_EQ(ch0.tsincWidth, 6);
+    EXPECT_EQ(ch0.windowSize, 16);
+    EXPECT_EQ(ch0.taperConst, 30);
+    EXPECT_DOUBLE_EQ(ch0.findTimeReso, 0.25);
+
     EXPECT_TRUE(ch1.timing);
     EXPECT_STREQ(ch1.timingMethod.c_str(), "DCFD");
     EXPECT_DOUBLE_EQ(ch1.cfdFraction, 0.4);
-    EXPECT_EQ(ch1.timeDelay, 4);
-    EXPECT_EQ(ch1.interpolationPoints, 7);    
-}
+    EXPECT_EQ(ch1.timeDelay, 16);
+    EXPECT_EQ(ch1.interpolationPoints, 8);
+    EXPECT_EQ(ch1.tsincWidth, 6);
+    EXPECT_EQ(ch1.windowSize, 16);
+    EXPECT_EQ(ch1.taperConst, 30);
+    EXPECT_DOUBLE_EQ(ch1.findTimeReso, 0.25);
 
+    std::ofstream ofs("/home/mingf2/projects/coincidence/test/testdata/sincCoef.txt");
+    for (std::size_t i = 0; i < ch0.sincCoefs.size() / ch0.interpolationPoints; i++)
+    {
+        for (std::size_t j = 0; j < ch0.interpolationPoints; j++)
+        {
+            ofs << ch0.sincCoefs[i*ch0.interpolationPoints+j] << '\t';
+            /* code */
+        }
+        ofs << '\n';
+    }
+    ofs.close();
+    
+
+
+}
 TEST(getInputTest, plotPHDPID)
 {
     std::string f("/home/mingf2/projects/coincidence/test/inputTest.json");

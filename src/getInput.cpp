@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 12:41:49
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 00:15:57
+ * @LastEditTime: 2021-03-29 20:31:52
  */
 
 #include "getInput.h"
@@ -29,6 +29,30 @@ int ChannelSettings::getSampleNumber()
     return 0;
 }
 
+int ChannelSettings::timingSetup()
+{
+    interpolationPoints++;
+    startIndex = preTrig - windowSize / 2;
+    startIndex = (startIndex > 0) ? startIndex : 0;
+    timeDelay = timeDelay / timestep * interpolationPoints;
+    findTimeReso = timestep;
+    findTimeReso /= interpolationPoints;
+
+    // get tSinc coeff
+    Double_t temp(0);
+    double_t phi(0);
+    sincCoefs.push_back(1);
+    for(int j = 1; j < tsincWidth * interpolationPoints; j++)
+    {
+        phi = j * M_PI;
+        phi /= interpolationPoints;
+        temp = j;
+        temp /= taperConst;
+        temp = sin(phi) / phi * exp(-temp * temp);
+        sincCoefs.push_back(temp);
+    }
+    return 0;
+}
 InputParameters::InputParameters(const std::string fpath)
 {
     // read the JSON input file
@@ -308,6 +332,11 @@ int InputParameters::getSpecificChannelSettings()
         channelI.shortGate += channelI.preGate;
         if(channelI.shortGate > channelI.length){
             channelI.shortGate = channelI.length;
+        }
+        
+        if (channelI.timing)
+        {
+            channelI.timingSetup();
         }
         
         channelSettings.push_back(channelI);

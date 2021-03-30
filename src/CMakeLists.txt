@@ -13,3 +13,5 @@ target_link_libraries(loadEvents PUBLIC getInput ROOT::Gpad)
                     #   ROOT::RIO ROOT::ROOTDataFrame ROOT::ROOTVecOps 
                     #   ROOT::Rint ROOT::Thread ROOT::TreePlayer ROOT::Tree)
 
+add_library(loadCoincidences STATIC loadCoincidences.cpp)
+target_link_libraries(loadCoincidences PUBLIC getInput loadEvents ROOT::Gpad)

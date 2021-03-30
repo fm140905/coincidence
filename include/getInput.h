@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 12:41:05
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 00:08:38
+ * @LastEditTime: 2021-03-29 20:30:40
  */
 #pragma once
 
@@ -76,9 +76,15 @@ public:
     
     bool timing=false;
     std::string timingMethod="DIACFD";
+    int windowSize=16; // 16 samples
+    int startIndex=0; // start point for interpolation
     double cfdFraction=0.2;
     int timeDelay=6;
     int interpolationPoints=1;
+    int tsincWidth=6; // 6 lobes of tsinc function
+    int taperConst=30; // tapering constant
+    double findTimeReso=0; // time resolution after interpolation
+    std::vector<double> sincCoefs;
 
     bool plotGoodPulses=false;
     int goodNumber=0;
@@ -105,6 +111,7 @@ public:
     int PSDXBins=1;
     int PSDYBins=1;
 
+    int timingSetup();
 };
 
 struct CoincidenceSetting

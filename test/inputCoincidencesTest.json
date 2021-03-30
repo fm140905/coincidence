@@ -5,7 +5,7 @@
     {
         "Defaults":
         {
-            "MaxNumPulses": 100,
+            "MaxNumPulses": 10000,
             "Polarity": "negative",
             "Dynamicrange": 2.0,
             "TimeStep": 2,
@@ -107,7 +107,6 @@
         "ChannelSpecific":[
             {
                 "ChannelNumber": 0,
-                "MaxNumPulses": 100,
                 "ON": true,
                 "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
                 "Calibration": {
@@ -140,7 +139,7 @@
             "ON": true,
             "xmin": -10,
             "xmax": 10,
-            "Bins": 100
+            "Bins": 500
         }
     }
 }
