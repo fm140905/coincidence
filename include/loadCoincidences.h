@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-29 01:14:19
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 10:43:21
+ * @LastEditTime: 2021-03-30 14:02:29
  */
 
 #pragma once
@@ -12,6 +12,7 @@
 
 #include "getInput.h"
 #include "loadEvents.h"
+#include "loadChannel.h"
 
 class CoincidenceChannel
 {

@@ -6,16 +6,16 @@ add_test(
     COMMAND getInputTest
     )
     
-add_executable(loadEventsTest loadEventsTest.cpp)
-target_link_libraries(loadEventsTest PUBLIC gtest_main getInput loadEvents)
+add_executable(loadChannelTest loadChannelTest.cpp)
+target_link_libraries(loadChannelTest PUBLIC gtest_main getInput loadEvents loadChannel)
 
 add_test(
-    NAME loadEventsTest
-    COMMAND loadEventsTest
+    NAME loadChannelTest
+    COMMAND loadChannelTest
 )
 
 add_executable(loadCoincidencesTest loadCoincidencesTest.cpp)
-target_link_libraries(loadCoincidencesTest PUBLIC gtest_main getInput loadEvents loadCoincidences)
+target_link_libraries(loadCoincidencesTest PUBLIC gtest_main getInput loadEvents loadChannel loadCoincidences)
 
 add_test(
     NAME loadCoincidencesTest

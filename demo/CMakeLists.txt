@@ -1,5 +1,2 @@
-# add_executable(RootSimpleExample SimpleExample.cpp)
-# target_link_libraries(RootSimpleExample PUBLIC ROOT::Physics)
-
-# add_executable(demo main.cpp)
-# target_link_libraries(demo PUBLIC getInput)
+add_executable(demo demo.cpp)
+target_link_libraries(demo PUBLIC getInput loadEvents loadChannel loadCoincidences)

@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-29 10:25:37
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 20:41:27
+ * @LastEditTime: 2021-03-30 16:50:48
  */
 
 #include <gtest/gtest.h>
@@ -13,12 +13,13 @@
 #include "TCanvas.h"
 
 #include "../include/getInput.h"
+#include "../include/loadChannel.h"
 #include "../include/loadCoincidences.h"
 
 class CoincidenceTest : public ::testing::Test{
 public:
     void SetUp() override{
-        f = "/home/mingf2/projects/coincidence/test/inputCoincidencesTest.json";
+        f = "/media/ming/DATA/coincidence/test/loadCoincidencesTest.json";
         settings = new InputParameters(f);
         channel0 = new Channel(settings->channelSettings[0]);
         channel0->loadEvents();
@@ -53,7 +54,7 @@ TEST_F(CoincidenceTest, getTOFheader)
     coin->getTOFHeader(plotname);
     coin->TOFHeader.DrawClone();
     TOFCanvas->DrawClone();
-    TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - Header.png");
+    TOFCanvas->SaveAs("/media/ming/DATA/coincidence/test/testdata/TOF - Header.png");
 }
 
 TEST_F(CoincidenceTest, getTOFDIACFD)
@@ -63,7 +64,7 @@ TEST_F(CoincidenceTest, getTOFDIACFD)
     coin->getTOFDIACFD(plotname);
     coin->TOFDIACFD.DrawClone();
     TOFCanvas->DrawClone();
-    TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - DIACFD.png");
+    TOFCanvas->SaveAs("/media/ming/DATA/coincidence/test/testdata/TOF - DIACFD.png");
 }
 
 TEST_F(CoincidenceTest, getTOFDCFD)
@@ -73,5 +74,5 @@ TEST_F(CoincidenceTest, getTOFDCFD)
     coin->getTOFDIACFD(plotname);
     coin->TOFDIACFD.DrawClone();
     TOFCanvas->DrawClone();
-    TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - DCFD.png");
+    TOFCanvas->SaveAs("/media/ming/DATA/coincidence/test/testdata/TOF - DCFD.png");
 }

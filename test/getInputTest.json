@@ -109,7 +109,7 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
+                "Path": "/media/ming/DATA/coincidence/test/testdata/channel0.bin",
                 "MaxNumPulses": 100,
                 "Polarity": "positive",
                 "Dynamicrange": 1.0,
@@ -130,7 +130,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
+                "Path": "/media/ming/DATA/coincidence/test/testdata/channel1.bin",
                 "PSDCut": {
                     "ON": true,
                     "LazyCut": false,

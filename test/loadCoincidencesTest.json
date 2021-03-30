@@ -43,9 +43,9 @@
             },
 
             "EnergyCut": {
-                "ON": true,
-                "LowerThreshold": 0.0,
-                "UpperThreshold": 500.0
+                "ON": false,
+                "LowerThreshold": 600.0,
+                "UpperThreshold": 2000.0
             },
 
             "PSDCut": {
@@ -59,8 +59,8 @@
             },
             
             "Timing": {
-                "ON": false,
-                "Method": "DIACFD", //DCFD
+                "ON": true,
+                "Method": "DCFD", //DCFD
                 "Interpolation": 7,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
@@ -107,9 +107,8 @@
         "ChannelSpecific":[
             {
                 "ChannelNumber": 0,
-                "MaxNumPulses": 100,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
+                "Path": "/media/ming/DATA/coincidence/test/testdata/channel0.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,
@@ -120,7 +119,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
+                "Path": "/media/ming/DATA/coincidence/test/testdata/channel1.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,
@@ -140,7 +139,7 @@
             "ON": true,
             "xmin": -10,
             "xmax": 10,
-            "Bins": 100
+            "Bins": 500
         }
     }
 }
