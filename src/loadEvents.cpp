@@ -133,8 +133,8 @@ int Event::energyCut()
 {
     if (isGood && channelSetting.energyCut)
     {
-        if (energy > channelSetting.EnergyLowerThreshold ||
-            energy < channelSetting.EnergyUpperThreshold)
+        if (energy < channelSetting.EnergyLowerThreshold ||
+            energy > channelSetting.EnergyUpperThreshold)
         {
             isGood = false;
         }
@@ -150,8 +150,8 @@ int Event::PSDCut()
         double psdRatio = tailIntegral / totalIntegral;
         if (channelSetting.lazyCut)
         {
-            if (psdRatio > channelSetting.PSDLowerThreshold ||
-                psdRatio < channelSetting.PSDUpperThreshold)
+            if (psdRatio < channelSetting.PSDLowerThreshold ||
+                psdRatio > channelSetting.PSDUpperThreshold)
             {
                 isGood = false;
             }
@@ -218,13 +218,7 @@ int Channel::loadEvents()
                 {
                     goodPulses.push_back(voltage);
                 }
-                if (channelSetting.timing)
-                {
-                    std::vector<double> interpolated(channelSetting.windowSize * channelSetting.interpolationPoints, 0);
-                    sincInterpolation(interpolated);
-                    // interpPulses.push_back(interpolated);
-                    timing(newPulse);
-                }
+                timing(newPulse);
                 events.push_back(newPulse);
             }
             else
@@ -247,7 +241,7 @@ int Channel::loadEvents()
     return 0;
 }
 
-int Channel::sincInterpolation(std::vector<Double_t>& interpolated)
+int Channel::getInterpPulse(std::vector<Double_t>& interpolated)
 {
     for (std::size_t i = 0; i < interpolated.size(); i++)
     {
@@ -255,6 +249,21 @@ int Channel::sincInterpolation(std::vector<Double_t>& interpolated)
     }
     
     return 0;
+}
+
+int Channel::getBipolarPulse(std::vector<Double_t>& interpolated)
+{
+    for (std::size_t i = channelSetting.timeDelay; i < interpolated.size(); i++)
+    {
+        interpolated[i] = getBipolarPoint(i);
+    }
+    
+    return 0;
+}
+
+double Channel::getBipolarPoint(const int&i)
+{
+    return channelSetting.cfdFraction * getInterpPoint(i) - getInterpPoint(i-channelSetting.timeDelay);
 }
 
 double Channel::getInterpPoint(const int& i)
@@ -305,35 +314,77 @@ int Channel::findMax(int low, int high)
     return (getInterpPoint(left) < getInterpPoint(mid)) && (getInterpPoint(right) < getInterpPoint(mid)) ? mid : (getInterpPoint(left) > getInterpPoint(right) ? left : right);
 }
 
-int Channel::timing(Event& event)
+int Channel::timing(Event& event) 
+{
+    if (channelSetting.timing)
+    {
+        // std::vector<double> interpolated(channelSetting.windowSize * channelSetting.interpolationPoints, 0);
+        // // getInterpPulse(interpolated);
+        // getBipolarPulse(interpolated);
+        // interpPulses.push_back(interpolated);
+        if (channelSetting.timingMethod=="DIACFD")
+        {
+            timingDIACFD(event);
+        }
+        else if (channelSetting.timingMethod=="DCFD")
+        {
+            timingDCFD(event);
+        }
+        else
+        {
+            throw std::invalid_argument(channelSetting.timingMethod + "is not available.");
+        }
+        
+    }
+    return 0;
+}
+
+int Channel::timingDCFD(Event& event) 
+{
+    // // DCFD
+    double ymax(0);
+    int imax(0);
+    getInterpMax(ymax, imax);
+
+    // solve y[i] - f * ymax = 0
+    ymax *= channelSetting.cfdFraction;
+    int low = findInterp(0, imax, ymax);
+
+    // coarse time stamp at startIndex
+    ULong64_t coarseTimeStamp = (event.timeStampHeader / 2000  - channelSetting.preTrig + channelSetting.startIndex) * 2;
+    ymax =  (getInterpPoint(low) - ymax) / (getInterpPoint(low) - getInterpPoint(low + 1)) + low; 
+    event.timeStampDACFD = ymax * channelSetting.findTimeReso + coarseTimeStamp;
+    return 0;
+}
+
+int Channel::timingDIACFD(Event& event)
 {
     // // DIACFD
     double ymax(0);
     int imax(0);
     getInterpMax(ymax, imax);
-    const double& f = channelSetting.cfdFraction;
-    const int& d = channelSetting.cfdFraction;
 
     // solve f * y[i] - y[i+\delta] = 0
     int low;
-    if (f * ymax - getInterpPoint(imax + d) > 0)
+    if (getBipolarPoint(imax) > 0)
     {
         // zero crossing point inside (imax, imax + delta)
         // binary search
-        low = findZeroBinary(imax, imax +d);
+        low = findZeroBipolar(imax, imax + channelSetting.timeDelay);
     }
     else
     {
-        low = findZeroBinary(0, imax);
+        low = findZeroBipolar(channelSetting.timeDelay, imax);
     }
+
     // coarse time stamp at startIndex
-    ULong64_t coarseTimeStamp = (event.timeStampHeader / 2000  - channelSetting.preGate + channelSetting.startIndex) * 2;
-    ymax =  getInterpPoint(low) / (getInterpPoint(low) - getInterpPoint(low + 1)) + low; 
+    ULong64_t coarseTimeStamp = (event.timeStampHeader / 2000  - channelSetting.preTrig + channelSetting.startIndex) * 2;
+    ymax =  getBipolarPoint(low) / (getBipolarPoint(low) - getBipolarPoint(low + 1)) + low; 
     event.timeStampDACFD = ymax * channelSetting.findTimeReso + coarseTimeStamp;
     return 0;
 }
 
-int Channel::findZeroBinary(int low, int high)
+int Channel::findInterp(int low, int high, const double& value)
 {
     // base case
     if (high - low < 2)
@@ -341,15 +392,34 @@ int Channel::findZeroBinary(int low, int high)
         return low;
     }
     int mid = (low + high) / 2;
-    if (getInterpPoint(mid) > 0)
+    if (getInterpPoint(mid) < value)
     {
-        return findZeroBinary(mid, high);
+        return findInterp(mid, high, value);
     }
     else
     {
-        return findZeroBinary(low, mid);
+        return findInterp(low, mid, value);
     }
 }
+
+int Channel::findZeroBipolar(int low, int high)
+{
+    // base case
+    if (high - low < 2)
+    {
+        return low;
+    }
+    int mid = (low + high) / 2;
+    if (getBipolarPoint(mid) > 0)
+    {
+        return findZeroBipolar(mid, high);
+    }
+    else
+    {
+        return findZeroBipolar(low, mid);
+    }
+}
+
 int Channel::getPulseGraph(const std::vector<std::vector<double_t>>& pulses, const UInt_t& pulseNum, 
                            TMultiGraph* multiGraph, const std::string& plotName, const int& pts)
 {

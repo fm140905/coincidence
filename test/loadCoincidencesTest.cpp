@@ -43,7 +43,7 @@ public:
 TEST_F(CoincidenceTest, findCoincidences)
 {
     std::cout << coin->pairIndices.size() << std::endl;
-    EXPECT_EQ(coin->pairIndices.size(), 100000);
+    EXPECT_EQ(coin->pairIndices.size(), 10000);
 }
 
 TEST_F(CoincidenceTest, getTOFheader)
@@ -64,4 +64,14 @@ TEST_F(CoincidenceTest, getTOFDIACFD)
     coin->TOFDIACFD.DrawClone();
     TOFCanvas->DrawClone();
     TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - DIACFD.png");
+}
+
+TEST_F(CoincidenceTest, getTOFDCFD)
+{
+    std::string plotname = "TOF - DCFD";
+    std::unique_ptr<TCanvas> TOFCanvas(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+    coin->getTOFDIACFD(plotname);
+    coin->TOFDIACFD.DrawClone();
+    TOFCanvas->DrawClone();
+    TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - DCFD.png");
 }

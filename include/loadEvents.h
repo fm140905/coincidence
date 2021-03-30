@@ -62,12 +62,18 @@ private:
     int getPulseGraph(const std::vector<std::vector<double_t>>& pulses, const UInt_t& pulseNum, 
                            TMultiGraph* multiGraph, const std::string& plotName,
                            const int& pts=1);
+
     std::vector<Double_t> sincCoeffs;
-    int sincInterpolation(std::vector<Double_t>& interpolated);
+    int getInterpPulse(std::vector<Double_t>& interpolated);
     double getInterpPoint(const int& i);
+
+    int getBipolarPulse(std::vector<Double_t>& interpolated);
+    double getBipolarPoint(const int&i);
+
     int getInterpMax(double& ymax, int& imax);
     int findMax(int low, int high);
-    int findZeroBinary(int low, int high);
+    int findInterp(int low, int high, const double& value);
+    int findZeroBipolar(int low, int high);
 public:
     std::vector<double> voltage;
     std::vector<Event> events;
@@ -76,6 +82,8 @@ public:
     int loadEvents();
 
     int timing(Event& event);
+    int timingDCFD(Event& event);
+    int timingDIACFD(Event& event);
     
     std::vector<std::vector<double_t>> goodPulses;
     std::vector<std::vector<double_t>> badPulses;

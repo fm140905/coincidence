@@ -143,6 +143,24 @@ TEST_F(ChannelTest, plotPSDTest)
     PSDCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/PSD - channel 1.png");
 }
 
+TEST_F(ChannelTest, energyCutTest)
+{
+    std::string plotname = "PID - channel " + std::to_string(settings->channelSettings[0].channelNumber);
+    std::unique_ptr<TCanvas> PIDCanvasCH0(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+    channel0->getPID(plotname);
+    channel0->PID.DrawClone();
+    PIDCanvasCH0->DrawClone();
+    PIDCanvasCH0->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Cut PID - channel 0.png");
+
+    plotname = "PID - channel " + std::to_string(settings->channelSettings[1].channelNumber);
+    std::unique_ptr<TCanvas> PIDCanvasCH1(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+    channel1->getPID(plotname);
+    channel1->PID.DrawClone();
+    PIDCanvasCH1->DrawClone();
+    PIDCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Cut PID - channel 1.png");
+    
+}
+
 // TEST_F(ChannelTest, interpolationTest)
 // {
 //     std::string plotname = "Interpolated pulses - channel " + std::to_string(settings->channelSettings[0].channelNumber);
@@ -158,5 +176,23 @@ TEST_F(ChannelTest, plotPSDTest)
 //     channel1->interpPulseGraph.DrawClone("A PLC PMC");
 //     goodPulseCanvasCH1->DrawClone();
 //     goodPulseCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Interpolated pulses - channel 1.png");
+
+// }
+
+// TEST_F(ChannelTest, bipolarTest)
+// {
+//     std::string plotname = "Bipolar pulses - channel " + std::to_string(settings->channelSettings[0].channelNumber);
+//     std::unique_ptr<TCanvas> goodPulseCanvasCH0(new TCanvas(plotname.c_str(), "Bipolar pulses", 200, 10, 700, 500));
+//     channel0->getinterpPulseGraph(plotname);
+//     channel0->interpPulseGraph.DrawClone("A PLC PMC");
+//     goodPulseCanvasCH0->DrawClone();
+//     goodPulseCanvasCH0->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Bipolar pulses - channel 0.png");
+
+//     plotname = "Bipolar pulses - channel " + std::to_string(settings->channelSettings[1].channelNumber);
+//     std::unique_ptr<TCanvas> goodPulseCanvasCH1(new TCanvas(plotname.c_str(), "Bipolar pulses", 200, 10, 700, 500));
+//     channel1->getinterpPulseGraph(plotname);
+//     channel1->interpPulseGraph.DrawClone("A PLC PMC");
+//     goodPulseCanvasCH1->DrawClone();
+//     goodPulseCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Bipolar pulses - channel 1.png");
 
 // }

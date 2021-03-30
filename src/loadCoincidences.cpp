@@ -20,12 +20,12 @@ int CoincidenceChannel::findCoincidences()
         //testfile << timediff << '\n';
         if (timediff - timewindow > 0 )
         {
-            j++;
+            i++;
         }
 
         else if (timediff + timewindow < 0)
         {
-            i++;
+            j++;
         }
 
         else

@@ -5,7 +5,7 @@
     {
         "Defaults":
         {
-            "MaxNumPulses": 100,
+            "MaxNumPulses": 10000,
             "Polarity": "negative",
             "Dynamicrange": 2.0,
             "TimeStep": 2,
@@ -43,7 +43,7 @@
             },
 
             "EnergyCut": {
-                "ON": false,
+                "ON": true,
                 "LowerThreshold": 0.0,
                 "UpperThreshold": 500.0
             },
@@ -59,7 +59,7 @@
             },
             
             "Timing": {
-                "ON": true,
+                "ON": false,
                 "Method": "DIACFD", //DCFD
                 "Interpolation": 7,
                 "Fraction": 0.4,

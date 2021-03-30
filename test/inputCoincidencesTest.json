@@ -43,9 +43,9 @@
             },
 
             "EnergyCut": {
-                "ON": false,
-                "LowerThreshold": 0.0,
-                "UpperThreshold": 500.0
+                "ON": true,
+                "LowerThreshold": 600.0,
+                "UpperThreshold": 2000.0
             },
 
             "PSDCut": {
@@ -60,7 +60,7 @@
             
             "Timing": {
                 "ON": true,
-                "Method": "DIACFD", //DCFD
+                "Method": "DCFD", //DCFD
                 "Interpolation": 7,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
