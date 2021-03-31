@@ -29,14 +29,14 @@ TEST(getInputTest, cannotFindInput)
 
 TEST(getInputTest, getSpecificChannelSetting)
 {
-    std::string f("/media/ming/DATA/coincidence/test/getInputTest.json");
+    std::string f("/home/mingf2/projects/coincidence/test/getInputTest.json");
     const InputParameters settings(f);
     EXPECT_EQ(settings.channelSettings.size(), 2);
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
 
     EXPECT_EQ(ch0.channelNumber, 0);
-    EXPECT_STREQ(ch0.path.c_str(), "/media/ming/DATA/coincidence/test/testdata/channel0.bin");
+    EXPECT_STREQ(ch0.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel0.bin");
     EXPECT_TRUE(ch0.processOutput);
     EXPECT_EQ(ch0.maxNumPulses, 100);
     EXPECT_EQ(ch0.channelNumber, 0);
@@ -91,7 +91,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     }
 
     // channel 1
-    EXPECT_STREQ(ch1.path.c_str(), "/media/ming/DATA/coincidence/test/testdata/channel1.bin");
+    EXPECT_STREQ(ch1.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
     EXPECT_EQ(ch1.maxNumPulses, 10000);
     EXPECT_EQ(ch1.channelNumber, 1);
@@ -147,7 +147,7 @@ TEST(getInputTest, getSpecificChannelSetting)
 
 TEST(getInputTest, timingTest)
 {
-    std::string f("/media/ming/DATA/coincidence/test/getInputTest.json");
+    std::string f("/home/mingf2/projects/coincidence/test/getInputTest.json");
     const InputParameters settings(f);
     EXPECT_EQ(settings.channelSettings.size(), 2);
     const ChannelSettings& ch0 = settings.channelSettings[0];
@@ -173,7 +173,7 @@ TEST(getInputTest, timingTest)
     EXPECT_EQ(ch1.taperConst, 30);
     EXPECT_DOUBLE_EQ(ch1.findTimeReso, 0.25);
 
-    std::ofstream ofs("/media/ming/DATA/coincidence/test/testdata/sincCoef.txt");
+    std::ofstream ofs("/home/mingf2/projects/coincidence/test/testdata/sincCoef.txt");
     for (std::size_t i = 0; i < ch0.sincCoefs.size() / ch0.interpolationPoints; i++)
     {
         for (std::size_t j = 0; j < ch0.interpolationPoints; j++)
@@ -190,7 +190,7 @@ TEST(getInputTest, timingTest)
 }
 TEST(getInputTest, plotPHDPID)
 {
-    std::string f("/media/ming/DATA/coincidence/test/getInputTest.json");
+    std::string f("/home/mingf2/projects/coincidence/test/getInputTest.json");
     const InputParameters settings(f);
     EXPECT_EQ(settings.channelSettings.size(), 2);
     const ChannelSettings& ch0 = settings.channelSettings[0];
@@ -231,7 +231,7 @@ TEST(getInputTest, plotPHDPID)
 
 TEST(getInputTest, plotPSD)
 {
-    std::string f("/media/ming/DATA/coincidence/test/getInputTest.json");
+    std::string f("/home/mingf2/projects/coincidence/test/getInputTest.json");
     const InputParameters settings(f);
     EXPECT_EQ(settings.channelSettings.size(), 2);
     const ChannelSettings& ch0 = settings.channelSettings[0];
@@ -259,7 +259,7 @@ TEST(getInputTest, plotPSD)
 
 TEST(getInputTest, getCoincidenceSetting)
 {
-    std::string f("/media/ming/DATA/coincidence/test/getInputTest.json");
+    std::string f("/home/mingf2/projects/coincidence/test/getInputTest.json");
     const InputParameters settings(f);
     const CoincidenceSetting& coinset = settings.coincidenceSetting;
     EXPECT_TRUE(coinset.coincidence);

@@ -1,9 +1,8 @@
-/*
- * @Description: read single channel
- * @Author: Ming Fang
- * @Date: 2021-03-30 13:54:32
- * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-30 13:57:26
+/**
+ * @file loadChannel.cpp
+ * @author Ming Fang
+ * @brief Process events of a single channel from a binary input file
+ * @date 2021-03-30
  */
 
 #include "../include/loadChannel.h"

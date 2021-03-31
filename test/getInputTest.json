@@ -11,7 +11,6 @@
             "TimeStep": 2,
             "Resolution": 14,
             "Headers": [2,2,8,2,2,4,4],
-            "SaveHeaders": [false, false, false, false, false, false, false],
             "SampleSize": 2,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
@@ -109,7 +108,7 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/media/ming/DATA/coincidence/test/testdata/channel0.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
                 "MaxNumPulses": 100,
                 "Polarity": "positive",
                 "Dynamicrange": 1.0,
@@ -130,7 +129,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/media/ming/DATA/coincidence/test/testdata/channel1.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
                 "PSDCut": {
                     "ON": true,
                     "LazyCut": false,

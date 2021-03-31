@@ -1,29 +1,34 @@
-/*
- * @Description: Load pulses from binary files
- * @Author: Ming Fang
- * @Date: 2021-03-26 23:41:11
- * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 20:36:24
+/**
+ * @file loadEvents.cpp
+ * @author Ming Fang
+ * @brief Load single event. Perform calibration and rejection.
+ * @date 2021-03-30
  */
+
 #include "loadEvents.h"
 
 
 int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>& voltage)
 {
     // read headers
+
+    // read digitizer time stamp
     bufIndex += channelSetting.headers[0] + channelSetting.headers[1];
     std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[2],
             reinterpret_cast<char *>(&timeStampHeader));
-    bufIndex += channelSetting.headers[2];
-    std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[3],
-            reinterpret_cast<char *>(&energyLongHeader));
-    bufIndex += channelSetting.headers[3];
-    std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[4],
-            reinterpret_cast<char *>(&energyShortHeader));
-    bufIndex += channelSetting.headers[4];
-    std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[5],
-            reinterpret_cast<char *>(&flagHeader));
-    bufIndex = bufIndex + channelSetting.headers[5] + channelSetting.headers[6];
+    bufIndex += std::accumulate(channelSetting.headers.begin()+2, channelSetting.headers.end(), 0);
+    // bufIndex += channelSetting.headers[2];
+
+    // // skip other headers
+    // std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[3],
+    //         reinterpret_cast<char *>(&energyLongHeader));
+    // bufIndex += channelSetting.headers[3];
+    // std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[4],
+    //         reinterpret_cast<char *>(&energyShortHeader));
+    // bufIndex += channelSetting.headers[4];
+    // std::copy(&buffer[bufIndex], &buffer[bufIndex] + channelSetting.headers[5],
+    //         reinterpret_cast<char *>(&flagHeader));
+    // bufIndex = bufIndex + channelSetting.headers[5] + channelSetting.headers[6];
 
     // read waveform samples
     std::vector<uint16_t> waveform;
@@ -32,7 +37,6 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
     bufIndex = bufIndex + channelSetting.sampleSize * channelSetting.length;
 
     // processing
-    Double_t heightTemp(0);
 
     //calculate the baseline.
     Double_t baseline = 0;
@@ -40,7 +44,7 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
                                waveform.begin()+channelSetting.offset, 0);
     baseline = baseline / channelSetting.offset;
 
-    //convert to voltage
+    //convert unit to voltage
     for (int k = 0; k < channelSetting.length; k++)
     {
         voltage[k] = channelSetting.polarityCoef *

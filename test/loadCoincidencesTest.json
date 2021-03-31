@@ -108,7 +108,7 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/media/ming/DATA/coincidence/test/testdata/channel0.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,
@@ -119,7 +119,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/media/ming/DATA/coincidence/test/testdata/channel1.bin",
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,

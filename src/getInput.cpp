@@ -1,9 +1,8 @@
-/*
- * @Description: Get input parameters from a json file
- * @Author: Ming Fang
- * @Date: 2021-03-26 12:41:49
- * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 20:31:52
+/**
+ * @file getInput.cpp
+ * @author Ming Fang
+ * @brief Get input parameters from a json file
+ * @date 2021-03-30
  */
 
 #include "getInput.h"

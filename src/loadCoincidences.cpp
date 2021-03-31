@@ -1,9 +1,8 @@
-/*
- * @Description: Load coincidences
- * @Author: Ming Fang
- * @Date: 2021-03-29 10:17:41
- * @LastEditors: Ming Fang
- * @LastEditTime: 2021-03-29 20:47:21
+/**
+ * @file loadCoincidences.cpp
+ * @author Ming Fang
+ * @brief Get coincident events from a pair of channels.
+ * @date 2021-03-30
  */
 
 #include "loadCoincidences.h"

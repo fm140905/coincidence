@@ -26,7 +26,7 @@ int main(int argc, char** argv)
         mkdir("output", 0700);
     }
     auto startTime = std::chrono::high_resolution_clock::now();
-    const std::string settingFilePath("/media/ming/DATA/coincidence/test/loadCoincidencesTest.json");
+    const std::string settingFilePath("/home/mingf2/projects/coincidence/test/loadCoincidencesTest.json");
     const InputParameters settings(settingFilePath);
     
     // const Channel channel0(settings->channelSettings[0]);
