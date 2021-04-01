@@ -13,7 +13,7 @@ int ChannelSettings::getSampleNumber()
     fileptr.open(path, std::ios::in | std::ios::binary);
     if (!fileptr.good())
     {
-        throw std::invalid_argument(path + "does not exit.");
+        throw std::invalid_argument(path + " does not exit.");
     }
     while (!fileptr.eof())
     {
@@ -69,6 +69,8 @@ InputParameters::InputParameters(const std::string fpath)
 
 int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSettings& chset)
 {
+    if (v.HasMember("Chunksize"))
+        chset.bufferSize = v["Chunksize"].GetInt();
     if (v.HasMember("ChannelNumber"))
         chset.channelNumber = v["ChannelNumber"].GetUint();
     if (v.HasMember("ON"))
@@ -108,6 +110,13 @@ int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSetting
         chset.dcOffset = v["DCOffset"].GetDouble();
     if (v.HasMember("BaselineSamples"))
         chset.offset = v["BaselineSamples"].GetInt();
+    if (v.HasMember("BaselineLocation")){
+        std::string strtmp=v["BaselineLocation"].GetString();
+        if(strtmp=="Tail")
+        {
+            chset.reversebaseline=true;
+        }
+    }
     if (v.HasMember("SavePulses"))
         chset.savePulses = v["SavePulses"].GetInt();
 
@@ -294,6 +303,12 @@ int InputParameters::getSpecificChannelSettings()
     for (rapidjson::SizeType i = 0; i < channelSpecs_.Size(); i++){
         ChannelSettings channelI = defaultChannelSetting;
         getChannelSetting(channelSpecs_[i], channelI);
+        if (!channelI.processOutput)
+        {
+        std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << "is disabled." << std::endl;
+        return 0;
+    }
+        
         channelI.getSampleNumber();
         // std::cout << channelI.length << "Samples." << std::endl;
 

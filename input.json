@@ -5,6 +5,7 @@
     {
         "Defaults":
         {
+            "Chunksize": 512, // buffer = 512 MB
             "MaxNumPulses": 10000,
             "Polarity": "negative",
             "Dynamicrange": 2.0,

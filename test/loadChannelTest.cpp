@@ -196,3 +196,34 @@ TEST_F(ChannelTest, plotPSDTest)
 //     goodPulseCanvasCH1->SaveAs("/home/mingf2/projects/coincidence/test/testdata/Bipolar pulses - channel 1.png");
 
 // }
+
+TEST_F(ChannelTest, saveOutputTest)
+{
+    std::string outdir="/home/mingf2/projects/coincidence/test/testdata/";
+    std::string outname;
+    outname = outdir + "Good pulses - channel 0";
+    channel0->saveGoodPulses(outname);
+    outname = outdir + "Bad pulses - channel 0" ;
+    channel0->saveBadPulses(outname);
+    outname = outdir + "PH - channel 0";
+    channel0->savePH(outname);
+    outname = outdir + "PI - channel 0";
+    channel0->savePI(outname);
+    outname = outdir + "Pulse integral - channel 0";
+    channel0->saveIntegrals(outname);
+    outname = outdir + "Time stamp - channel 0";
+    channel0->saveTimeStamp(outname);
+
+    outname = outdir + "Good pulses - channel 1";
+    channel1->saveGoodPulses(outname);
+    outname = outdir + "Bad pulses - channel 1" ;
+    channel1->saveBadPulses(outname);
+    outname = outdir + "PH - channel 1";
+    channel1->savePH(outname);
+    outname = outdir + "PI - channel 1";
+    channel1->savePI(outname);
+    outname = outdir + "Pulse integral - channel 1";
+    channel1->saveIntegrals(outname);
+    outname = outdir + "Time stamp - channel 1";
+    channel1->saveTimeStamp(outname);
+}

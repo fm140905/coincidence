@@ -36,6 +36,7 @@ public:
      * @return int 
      */
     int getSampleNumber();
+    int bufferSize=512; // size of data chunk to process, in MB
     std::string path; // path to binary file
     uint channelNumber=0; // channel number
     bool processOutput=false; // enable processing if true
@@ -53,6 +54,7 @@ public:
     int timestep=4; // digitizer time resolution in ns
     int resolution=12; // digitizer ADC resolution in bits
     int offset=16; // name of samples to calculate the baseline
+    bool reversebaseline=false; // baseline location, head or tail of the pulse
     double dcOffset=0.1; // DC offset
     int savePulses=1; // number of pulses to be saved
 

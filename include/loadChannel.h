@@ -33,8 +33,6 @@
 class Channel
 {
 private:
-    // settings for processing data from this channel.
-    const ChannelSettings& channelSetting;
     /**
      * @brief Get a graph of pulses
      * 
@@ -112,6 +110,8 @@ private:
      */
     int findZeroBipolar(int low, int high);
 public:
+    // settings for processing data from this channel.
+    const ChannelSettings& channelSetting;
     // tempory storage of the pulse when reading an event.
     std::vector<double> voltage;
     // holds all good events in the channel.
@@ -197,6 +197,7 @@ public:
      * @return int 
      */
     int getPHD(const std::string& plotName);
+
     // 1D Histogram object holding the pulse integral distribution.
     TH1D PID;
     /**
@@ -206,7 +207,7 @@ public:
      * @return int 
      */
     int getPID(const std::string& plotName);
-
+    
     // 2D Histogram object holding the PSD
     TH2D PSD;
     /**
@@ -216,4 +217,11 @@ public:
      * @return int 
      */
     int getPSD(const std::string& plotName);
+
+    int saveGoodPulses(const std::string& filename);
+    int saveBadPulses(const std::string& filename);
+    int savePH(const std::string& filename);
+    int savePI(const std::string& filename);
+    int saveTimeStamp(const std::string& filename);
+    int saveIntegrals(const std::string& filename);
 };

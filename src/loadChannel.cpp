@@ -9,9 +9,15 @@
 
 int Channel::loadEvents()
 {
+    if (!channelSetting.processOutput)
+    {
+        std::cout << "Warning: Pulse processing of channel " << channelSetting.channelNumber << "is disabled." << std::endl;
+        return 0;
+    }
+    
     voltage.resize(channelSetting.length, 0);
     // buffer size = 64MB
-    ULong_t bufSize = 1024*1024*64 / channelSetting.eventSize;
+    ULong_t bufSize = 1024*1024*channelSetting.bufferSize / channelSetting.eventSize;
     bufSize = bufSize * channelSetting.eventSize;
     char * buffer = new char[bufSize]; 
 
@@ -440,5 +446,122 @@ int Channel::getPSD(const std::string& plotName)
         }
     }
     PSD.GetYaxis()->SetTitle("Tail-Total ratio");
+    return 0;
+}
+
+int Channel::saveGoodPulses(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+    
+    const uint outN = (channelSetting.savePulses < goodPulses.size()) ? channelSetting.savePulses : goodPulses.size();
+    for (std::size_t i = 0; i < outN; i++)
+    {
+        for (std::size_t j = 0; j < channelSetting.length; j++)
+        {
+            outf << goodPulses[i][j] << '\t';
+        }
+        outf << '\n';
+    }
+    outf.close();
+    
+    return 0;
+}
+int Channel::saveBadPulses(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+    
+    const uint outN = (channelSetting.savePulses < badPulses.size()) ? channelSetting.savePulses : badPulses.size();
+    for (std::size_t i = 0; i < outN; i++)
+    {
+        for (std::size_t j = 0; j < channelSetting.length; j++)
+        {
+            outf << badPulses[i][j] << '\t';
+        }
+        outf << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+int Channel::savePH(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+
+    outf << "Pulse height (V)\n";
+    for (std::size_t i = 0; i < events.size(); i++)
+    {
+        outf << events[i].height << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+int Channel::savePI(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + " cannot be written to.");
+    }
+
+    outf << "Total int.(V*ns/dt)\n";
+    for (std::size_t i = 0; i < events.size(); i++)
+    {
+        outf << events[i].totalIntegral << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+int Channel::saveTimeStamp(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+
+    outf << "Header (ps)\tDIACFD/DCFD(ns)\n";
+    for (std::size_t i = 0; i < events.size(); i++)
+    {
+        outf << events[i].timeStampHeader << '\t' << events[i].timeStampDACFD << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+int Channel::saveIntegrals(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+
+    outf << "Total int.\tTail int.(V*ns/dt)\n";
+    for (std::size_t i = 0; i < events.size(); i++)
+    {
+        outf << events[i].totalIntegral << '\t' << events[i].tailIntegral << '\n';
+    }
+    outf.close();
+
     return 0;
 }

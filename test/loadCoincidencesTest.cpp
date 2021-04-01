@@ -76,3 +76,16 @@ TEST_F(CoincidenceTest, getTOFDCFD)
     TOFCanvas->DrawClone();
     TOFCanvas->SaveAs("/home/mingf2/projects/coincidence/test/testdata/TOF - DCFD.png");
 }
+
+TEST_F(CoincidenceTest, saveTOF)
+{
+    std::string outdir="/home/mingf2/projects/coincidence/test/testdata/";
+    std::string outname;
+    outname = outdir + "TOF Header";
+    coin->saveTOFHeader(outname);
+    if (coin->channel0.channelSetting.timing && coin->channel1.channelSetting.timing)
+    {
+        outname = outdir + "TOF DIACFD";
+        coin->saveTOFDIACFD(outname);
+    }
+}

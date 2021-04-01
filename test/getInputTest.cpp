@@ -35,6 +35,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
 
+    EXPECT_EQ(ch0.bufferSize, 512);
     EXPECT_EQ(ch0.channelNumber, 0);
     EXPECT_STREQ(ch0.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel0.bin");
     EXPECT_TRUE(ch0.processOutput);
@@ -57,6 +58,17 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_EQ(ch0.length, 104);
     EXPECT_DOUBLE_EQ(ch0.dcOffset, 0.2);
     EXPECT_EQ(ch0.offset, 8);
+    const std::vector<int> x{0,1,2,3,4,5,6,7,8,9};
+    EXPECT_TRUE(ch0.reversebaseline);
+    if (ch0.reversebaseline)
+    {
+        EXPECT_EQ(std::accumulate(x.rbegin(), x.rbegin()+3, 0), 24);
+    }
+    else
+    {
+        EXPECT_EQ(std::accumulate(x.begin(), x.begin()+3, 0), 3);
+    }
+    
     EXPECT_EQ(ch0.savePulses, 0);
 
     EXPECT_EQ(ch0.preTrig, 24);
@@ -91,6 +103,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     }
 
     // channel 1
+    EXPECT_EQ(ch1.bufferSize, 512);
     EXPECT_STREQ(ch1.path.c_str(), "/home/mingf2/projects/coincidence/test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
     EXPECT_EQ(ch1.maxNumPulses, 10000);

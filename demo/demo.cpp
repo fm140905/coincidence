@@ -26,13 +26,42 @@ int main(int argc, char** argv)
         mkdir("output", 0700);
     }
     auto startTime = std::chrono::high_resolution_clock::now();
-    const std::string settingFilePath("/home/mingf2/projects/coincidence/test/loadCoincidencesTest.json");
+    const std::string settingFilePath("/home/mingf2/projects/coincidence/demo/demo.json");
     const InputParameters settings(settingFilePath);
     
-    // const Channel channel0(settings->channelSettings[0]);
-    // channel0.loadEvents();
-    // const Channel channel1(settings->channelSettings[1]);
-    // channel1.loadEvents();
+    Channel channel0(settings.channelSettings[0]);
+    channel0.loadEvents();
+
+    std::string plotname = "Good pulses - channel 0";
+    std::unique_ptr<TCanvas> goodPulseCanvasCH0(new TCanvas(plotname.c_str(), "Good pulses", 200, 10, 700, 500));
+    channel0.getGoodPulseGraph(plotname);
+    channel0.goodPulseGraph.DrawClone("A PLC PMC");
+    goodPulseCanvasCH0->DrawClone();
+    goodPulseCanvasCH0->SaveAs("output/Good pulses - channel 0.png");
+
+    plotname = "PHD - channel 0";
+    std::unique_ptr<TCanvas> PHDCanvasCH0(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+    channel0.getPHD(plotname);
+    channel0.PHD.DrawClone();
+    PHDCanvasCH0->DrawClone();
+    PHDCanvasCH0->SaveAs("output/PHD - channel 0.png");
+
+    plotname = "PID - channel0 ";
+    std::unique_ptr<TCanvas> PIDCanvasCH0(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+    channel0.getPID(plotname);
+    channel0.PID.DrawClone();
+    PIDCanvasCH0->DrawClone();
+    PIDCanvasCH0->SaveAs("output/PID - channel 0.png");
+
+    std::string outname = "output/PH - channel 0";
+    channel0.savePH(outname);
+    outname = "output/PI - channel 0";
+    channel0.savePI(outname);
+    outname = "output/Pulse integral - channel 0";
+    channel0.saveIntegrals(outname);
+    outname = "output/Time stamp - channel 0";
+    channel0.saveTimeStamp(outname);
+    
     auto endTime = std::chrono::high_resolution_clock::now();
     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms" << std::endl; 
     // myapp->Run();

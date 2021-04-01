@@ -7,27 +7,28 @@
         {
             "Chunksize": 512, // buffer = 512 MB
             "MaxNumPulses": 10000,
-            "Polarity": "negative",
-            "Dynamicrange": 2.0,
+            "Polarity": "positive",
+            "Dynamicrange": 0.5,
             "TimeStep": 2,
             "Resolution": 14,
             "Headers": [2,2,8,2,2,4,4],
+            // "SaveHeaders": [false, false, false, false, false, false, false],
             "SampleSize": 2,
             "DCOffset": 0.2,
-            "BaselineSamples": 8,
+            "BaselineSamples": 256,
             "BaselineLocation": "Tail", // or "Head"
-            "SavePulses": 0,
+            "SavePulses": 0, // number of pulses to be saved
 
-            "PreTrigger": 48,
+            "PreTrigger": 96,
             "Gates": {
-                "PreGate": 20,
-                "ShortGate": 100,
-                "LongGate": 300
+                "PreGate": 510,
+                "ShortGate":80,
+                "LongGate": 10000
             },
             
             "Calibration": {
                 "Integral": {
-                    "ON": true,
+                    "ON": false,
                     "Coefficient": 1.0
                 },
                 "Height": {
@@ -60,7 +61,7 @@
             },
             
             "Timing": {
-                "ON": true,
+                "ON": false,
                 "Method": "DIACFD", //DCFD
                 "Interpolation": 7,
                 "Fraction": 0.4,
@@ -70,7 +71,7 @@
             "PlotPulses":{
                 "Good pulses": {
                     "ON": true,
-                    "Number": 100
+                    "Number": 10
                 },
                 "Rejected pulses": {
                     "ON": true,
@@ -80,22 +81,22 @@
 
             "Plot Pulse Height Distribution": {
                 "ON":true,
-                "Calibrated": true,
+                "Calibrated": false,
                 "xmin": 0,
-                "xmax": 1000,
+                "xmax": 0,
                 "Bins": 100
             },
 
             "Plot Pulse Integral Distribution": {
                 "ON":true,
-                "Calibrated": true,
+                "Calibrated": false,
                 "xmin": 0,
-                "xmax": 1000,
+                "xmax": 0,
                 "Bins": 100
             },
 
             "Plot PSD": {
-                "ON":true,
+                "ON":false,
                 "Calibrated": true,
                 "xmin": 0,
                 "xmax": 1000,
@@ -104,53 +105,37 @@
                 "ymax": 1.0,
                 "YBins": 100
             }
-
         },
         "ChannelSpecific":[
             {
                 "ChannelNumber": 0,
+                // "MaxNumPulses": 100,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin",
-                "MaxNumPulses": 100,
-                "Polarity": "positive",
-                "Dynamicrange": 1.0,
-                "Gates": {
-                    "PreGate": 50,
-                    "LongGate": 100
-                },
+                "Path": "/mnt/c/users/fm140/Downloads/800V_1min/UNFILTERED/Data_CH0@DT5730_1770_800V_1min.bin",
                 "Calibration": {
                     "Integral": {
-                        "ON": false
-                    },
-                    "Height": {
-                        "ON": true,
-                        "Coefficient": 100.0
+                        "ON": false,
+                        "Coefficient": 1
                     }
                 }
             },
             {
                 "ChannelNumber": 1,
-                "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin",
-                "PSDCut": {
-                    "ON": true,
-                    "LazyCut": false,
-    
-                    "QuadraticCut": true,
-                    "QuadracticCoefficients": [0.1,0.01,0.2]
-                },
-                
-                "Timing": {
-                    "ON": true,
-                    "Method": "DCFD"
+                "ON": false,
+                "Path": "channel1.bin",
+                "Calibration": {
+                    "Integral": {
+                        "ON": false,
+                        "Coefficient": 1
+                    }
                 }
             }
         ]
     },
     "CoincidenceSettings": 
     {
-        "ON": true,
-        "CoincidenceChannels": [0, 8],
+        "ON": false,
+        "CoincidenceChannels": [0, 1],
         "TimeWindow": 200,
         "SaveTimeDifference": true,
         "PlotTOF": {

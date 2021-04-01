@@ -32,7 +32,7 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
 
     // read waveform samples
     std::vector<uint16_t> waveform;
-    waveform.reserve(channelSetting.sampleSize*channelSetting.length);
+    waveform.resize(channelSetting.length);
     std::memcpy(waveform.data(), &buffer[bufIndex], channelSetting.sampleSize*channelSetting.length);
     bufIndex = bufIndex + channelSetting.sampleSize * channelSetting.length;
 
@@ -40,8 +40,18 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
 
     //calculate the baseline.
     Double_t baseline = 0;
-    baseline = std::accumulate(waveform.begin(), 
-                               waveform.begin()+channelSetting.offset, 0);
+    if (channelSetting.reversebaseline)
+    {
+        baseline = std::accumulate(waveform.rbegin(), 
+                                waveform.rbegin()+channelSetting.offset, 0);
+    }
+    else
+    {
+        baseline = std::accumulate(waveform.begin(), 
+                                waveform.begin()+channelSetting.offset, 0);
+    }
+    
+    
     baseline = baseline / channelSetting.offset;
 
     //convert unit to voltage

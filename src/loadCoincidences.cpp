@@ -69,3 +69,41 @@ int CoincidenceChannel::getTOFDIACFD(const std::string& plotname){
     
     return 0;
 }
+
+int CoincidenceChannel::saveTOFHeader(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+
+    outf << "Difference(ps)\n";
+    for (std::size_t i = 0; i < timeDiffHeader.size(); i++)
+    {
+        outf << timeDiffHeader[i] << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+
+int CoincidenceChannel::saveTOFDIACFD(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+
+    outf << "Difference(ns)\n";
+    for (std::size_t i = 0; i < timeDiffDIACFD.size(); i++)
+    {
+        outf << timeDiffDIACFD[i] << '\n';
+    }
+    outf.close();
+
+    return 0;
+}

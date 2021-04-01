@@ -79,4 +79,7 @@ public:
      */
     int getTOFHeader(const std::string& plotname);
     // ~CoincidenceChannel();
+
+    int saveTOFHeader(const std::string& filename);
+    int saveTOFDIACFD(const std::string& filename);
 };
