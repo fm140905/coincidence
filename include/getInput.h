@@ -36,23 +36,23 @@ public:
      * @return int 
      */
     int getSampleNumber();
-    int bufferSize=512; // size of data chunk to process, in MB
+    int bufferSize=64; // size of data chunk to process, in MB
     std::string path; // path to binary file
     uint channelNumber=0; // channel number
     bool processOutput=false; // enable processing if true
     
     ULong64_t maxNumPulses=-1; // max number of pulses to process
-    std::string polarity; // pulse polarity, either "negative" or "positive"
+    std::string polarity="negative"; // pulse polarity, either "negative" or "positive"
     int polarityCoef=-1; // pulse polarity, either -1 or 1
     std::vector<int> headers; // size of each header in bytes
     std::vector<bool> saveHeaders=std::vector<bool>(7, false);
-    int sampleSize=4; // size of waveform sample in bytes
+    int sampleSize=2; // size of waveform sample in bytes
     int eventSize=0; // total size of a single event in bytes
     int length=288; // number of samples in a waveform
     double dynamicRange=0.5; // dynamic range of the digitizer
     double lsb2voltage=1; // conversion from LSB to volt
-    int timestep=4; // digitizer time resolution in ns
-    int resolution=12; // digitizer ADC resolution in bits
+    int timestep=2; // digitizer time resolution in ns
+    int resolution=14; // digitizer ADC resolution in bits
     int offset=16; // name of samples to calculate the baseline
     bool reversebaseline=false; // baseline location, head or tail of the pulse
     double dcOffset=0.1; // DC offset

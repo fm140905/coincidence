@@ -537,11 +537,30 @@ int Channel::saveTimeStamp(const std::string& filename)
     {
         throw std::invalid_argument(filename + "cannot be written to.");
     }
-
-    outf << "Header (ps)\tDIACFD/DCFD(ns)\n";
-    for (std::size_t i = 0; i < events.size(); i++)
+    outf << std::fixed << std::setprecision(5);
+    if (channelSetting.timing && channelSetting.timingMethod=="DIACFD")
     {
-        outf << events[i].timeStampHeader << '\t' << events[i].timeStampDACFD << '\n';
+        outf << "Header (ps)\tDIACFD(ns)\n";
+        for (std::size_t i = 0; i < events.size(); i++)
+        {
+            outf << events[i].timeStampHeader << '\t'  << events[i].timeStampDACFD << '\n';
+        }
+    }
+    else if (channelSetting.timing && channelSetting.timingMethod=="DCFD")
+    {
+        outf << "Header (ps)\tDCFD(ns)\n";
+        for (std::size_t i = 0; i < events.size(); i++)
+        {
+            outf << events[i].timeStampHeader << '\t' << events[i].timeStampDACFD << '\n';
+        }
+    }
+    else
+    {
+        outf << "Header (ps)\t CFD disabled\n";
+        for (std::size_t i = 0; i < events.size(); i++)
+        {
+            outf << events[i].timeStampHeader << '\t' << 0 << '\n';
+        }
     }
     outf.close();
 

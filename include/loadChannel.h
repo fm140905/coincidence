@@ -24,7 +24,6 @@
 
 #include "getInput.h"
 #include "loadEvents.h"
-#include "event.h"
 
 /**
  * Holds events from a single channel.

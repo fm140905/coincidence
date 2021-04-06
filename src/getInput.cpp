@@ -30,7 +30,7 @@ int ChannelSettings::getSampleNumber()
 
 int ChannelSettings::timingSetup()
 {
-    interpolationPoints++;
+    // interpolationPoints++;
     startIndex = preTrig - windowSize / 2;
     startIndex = (startIndex > 0) ? startIndex : 0;
     timeDelay = timeDelay / timestep * interpolationPoints;
@@ -305,9 +305,9 @@ int InputParameters::getSpecificChannelSettings()
         getChannelSetting(channelSpecs_[i], channelI);
         if (!channelI.processOutput)
         {
-        std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << "is disabled." << std::endl;
-        return 0;
-    }
+            std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << "is disabled." << std::endl;
+            return 0;
+        }
         
         channelI.getSampleNumber();
         // std::cout << channelI.length << "Samples." << std::endl;
@@ -363,7 +363,12 @@ int InputParameters::getCoincidenceSetting()
 {
     const rapidjson::Value& coinSets_=jsonInput["CoincidenceSettings"];
     coincidenceSetting.coincidence=coinSets_["ON"].GetBool();
-    coincidenceSetting.coincidence=coinSets_["ON"].GetBool();
+    if (!coincidenceSetting.coincidence)
+    {
+        // coincidence disabled
+        return 0;
+    }
+    
     // now only support finding coincidences between two channels
     assert(coinSets_["CoincidenceChannels"].Size() == 2);
     coincidenceSetting.coincidentChannels.first = coinSets_["CoincidenceChannels"][0].GetUint();

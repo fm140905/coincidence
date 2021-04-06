@@ -79,7 +79,7 @@ int CoincidenceChannel::saveTOFHeader(const std::string& filename)
         throw std::invalid_argument(filename + "cannot be written to.");
     }
 
-    outf << "Difference(ps)\n";
+    outf << "Difference(ns)\n";
     for (std::size_t i = 0; i < timeDiffHeader.size(); i++)
     {
         outf << timeDiffHeader[i] << '\n';
