@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:24:22
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-06 15:35:25
+ * @LastEditTime: 2021-04-06 17:11:43
 -->
 ## Clone
 - Install `root`(v6.20 or above), `cmake` and `git`.
@@ -17,6 +17,7 @@
   mkdir -p build
   cd build
   cmake ..
+  make
   ```
   to compile the project.
 
@@ -36,7 +37,7 @@
 
 ## Run
 - Copy the executable `main` and input file `input.json` in `bin` folder to anywhere you like.
-- Edit the settings in `input.json` if necessary. Explanation of the parameters can be found [here!](https://gitlab.engr.illinois.edu/nml/pals/-/blob/master/README.md)
+- Edit the settings in `input.json` if necessary. Explanation of the parameters can be found in `Inuput file explained.md`.
 - Run
     ```bash
     ./main $(path-to-input.json)
