@@ -61,7 +61,7 @@
             "Timing": {
                 "ON": true,
                 "Method": "DCFD", //DCFD
-                "Interpolation": 7,
+                "Interpolation": 8,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
             },
@@ -108,7 +108,7 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "unitest/testdata/channel0.bin",
+                "Path": "test/testdata/channel0.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,
@@ -119,7 +119,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "unitest/testdata/channel1.bin",
+                "Path": "test/testdata/channel1.bin",
                 "Calibration": {
                     "Integral": {
                         "ON": true,

@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-06 12:26:25
+ * @LastEditTime: 2021-04-07 21:33:10
  */
 
 #include <gtest/gtest.h>
@@ -37,7 +37,7 @@ TEST(getInputTest, getSpecificChannelSetting)
 
     EXPECT_EQ(ch0.bufferSize, 512);
     EXPECT_EQ(ch0.channelNumber, 0);
-    EXPECT_STREQ(ch0.path.c_str(), "/home/mingf2/projects/coincidence/unitest/testdata/channel0.bin");
+    EXPECT_STREQ(ch0.path.c_str(), "test/testdata/channel0.bin");
     EXPECT_TRUE(ch0.processOutput);
     EXPECT_EQ(ch0.maxNumPulses, 100);
     EXPECT_EQ(ch0.channelNumber, 0);
@@ -104,7 +104,7 @@ TEST(getInputTest, getSpecificChannelSetting)
 
     // channel 1
     EXPECT_EQ(ch1.bufferSize, 512);
-    EXPECT_STREQ(ch1.path.c_str(), "/home/mingf2/projects/coincidence/unitest/testdata/channel1.bin");
+    EXPECT_STREQ(ch1.path.c_str(), "test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
     EXPECT_EQ(ch1.maxNumPulses, 10000);
     EXPECT_EQ(ch1.channelNumber, 1);

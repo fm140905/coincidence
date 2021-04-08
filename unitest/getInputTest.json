@@ -62,7 +62,7 @@
             "Timing": {
                 "ON": true,
                 "Method": "DIACFD", //DCFD
-                "Interpolation": 7,
+                "Interpolation": 8,
                 "Fraction": 0.4,
                 "TimeDelay": 4 
             },
@@ -110,7 +110,7 @@
             {
                 "ChannelNumber": 0,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/unitest/testdata/channel0.bin",
+                "Path": "test/testdata/channel0.bin",
                 "MaxNumPulses": 100,
                 "Polarity": "positive",
                 "Dynamicrange": 1.0,
@@ -131,7 +131,7 @@
             {
                 "ChannelNumber": 1,
                 "ON": true,
-                "Path": "/home/mingf2/projects/coincidence/unitest/testdata/channel1.bin",
+                "Path": "test/testdata/channel1.bin",
                 "PSDCut": {
                     "ON": true,
                     "LazyCut": false,
