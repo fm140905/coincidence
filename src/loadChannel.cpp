@@ -5,7 +5,7 @@
  * @date 2021-03-30
  */
 
-#include "../include/loadChannel.h"
+#include "loadChannel.h"
 
 int Channel::loadEvents()
 {

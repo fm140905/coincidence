@@ -13,10 +13,10 @@
 #include "TCanvas.h"
 #include "TError.h"
 
-#include "../include/getInput.h"
-#include "../include/loadEvents.h"
-#include "../include/loadChannel.h"
-#include "../include/loadCoincidences.h"
+#include "getInput.h"
+#include "loadEvents.h"
+#include "loadChannel.h"
+#include "loadCoincidences.h"
 
 int main(int argc, char** argv)
 {

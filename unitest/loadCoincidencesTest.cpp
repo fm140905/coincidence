@@ -12,9 +12,9 @@
 
 #include "TCanvas.h"
 
-#include "../include/getInput.h"
-#include "../include/loadChannel.h"
-#include "../include/loadCoincidences.h"
+#include "getInput.h"
+#include "loadChannel.h"
+#include "loadCoincidences.h"
 
 class CoincidenceTest : public ::testing::Test{
 public:

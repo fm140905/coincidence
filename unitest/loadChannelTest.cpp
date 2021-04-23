@@ -12,8 +12,8 @@
 
 #include "TCanvas.h"
 
-#include "../include/getInput.h"
-#include "../include/loadChannel.h"
+#include "getInput.h"
+#include "loadChannel.h"
 
 class ChannelTest : public ::testing::Test{
 public:

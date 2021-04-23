@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "../include/getInput.h"
+#include "getInput.h"
 
 TEST(getInputTest, cannotFindInput)
 {
