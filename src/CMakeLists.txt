@@ -19,4 +19,5 @@ target_link_libraries(loadChannel PUBLIC getInput loadEvents ROOT::Gpad)
 add_library(loadCoincidences STATIC loadCoincidences.cpp)
 target_link_libraries(loadCoincidences PUBLIC getInput loadEvents loadChannel ROOT::Gpad)
 
-add_subdirectory(gui_example)
+# add_subdirectory(gui_example)
+add_subdirectory(gui)
