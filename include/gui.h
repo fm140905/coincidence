@@ -18,15 +18,7 @@ public:
     MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
     virtual ~MyMainFrame();
     void DoDraw();
+    void Start();
+    void Stop();
     ClassDef(MyMainFrame,0)
 };
-
-inline void Start()
-{
-   printf("\"Start Filling Hists\" Button Pressed!\n");
-}
-
-inline void Stop()
-{
-   printf("\"Stop Filling Hists\" Button Pressed!\n");
-}

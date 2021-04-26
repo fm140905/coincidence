@@ -3,7 +3,7 @@
 
 void example() {
    // Popup the GUI...
-   new MyMainFrame(gClient->GetRoot(),200,200);
+   new MyMainFrame(gClient->GetRoot(),800, 600);
 }
 
 int main(int argc, char **argv) {

@@ -3,30 +3,7 @@
 MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
    : TGMainFrame(p,w,h) {
 
-   // // Creates widgets of the example
-   // fEcanvas = new TRootEmbeddedCanvas ("Ecanvas",this,200,200);
-   // AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
-   //                               kLHintsExpandY, 10,10,10,1));
-   // TGHorizontalFrame *hframe=new TGHorizontalFrame(this, 200,40);
-   // TGTextButton *draw = new TGTextButton(hframe,"&Draw");
-   // draw->Connect("Clicked()","MyMainFrame",this,"DoDraw()");
-   // hframe->AddFrame(draw, new TGLayoutHints(kLHintsCenterX,
-   //                                        5,5,3,4));
-   // TGTextButton *exit = new TGTextButton(hframe,"&Exit ",
-   //                            "gApplication->Terminate()");
-   // hframe->AddFrame(exit, new TGLayoutHints(kLHintsCenterX,
-   //                                        5,5,3,4));
-   // AddFrame(hframe,new TGLayoutHints(kLHintsCenterX,2,2,2,2));
-
-
-   // // Sets window name and shows the main frame
-   // SetWindowName("Simple Example");
-   // MapSubwindows();
-   // Resize(GetDefaultSize());
-   // MapWindow();
-
-   TGHorizontalFrame *hFrame = new TGHorizontalFrame(this, 60, 20, 
-                               kFixedWidth);
+   TGHorizontalFrame *hFrame = new TGHorizontalFrame(this, 60, 20);
    TGTextButton* exit = new TGTextButton(hFrame, "&Exit", 
                         "gApplication->Terminate(0)");
    hFrame->AddFrame(exit, new TGLayoutHints(kLHintsTop | kLHintsLeft
@@ -46,10 +23,10 @@ MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
    //-------------- create a tab element with an embedded canvas and buttons
    tf = fTab->AddTab("Tab 2");
    TGCompositeFrame* fF3 = new TGCompositeFrame(tf, 60, 20, kHorizontalFrame);
-   TGTextButton *fStartB = new TGTextButton(fF3, "Start &Filling Hists", 
-                           "Start()");
-   TGTextButton *fStopB = new TGTextButton(fF3, "&Stop Filling Hists",
-                            "Stop()");
+   TGTextButton *fStartB = new TGTextButton(fF3, "Start &Filling Hists");
+   fStartB->Connect("Clicked()", "MyMainFrame", this, "Start()");
+   TGTextButton *fStopB = new TGTextButton(fF3, "&Stop Filling Hists");
+   fStopB->Connect("Clicked()", "MyMainFrame", this, "Stop()");
    fF3->AddFrame(fStartB, fL3);
    fF3->AddFrame(fStopB, fL3);
 
@@ -60,6 +37,8 @@ MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
    TRootEmbeddedCanvas *fEc2 = new TRootEmbeddedCanvas("ec2", fF5, 100, 100);
    fF5->AddFrame(fEc1, fL4);
    fF5->AddFrame(fEc2, fL4);
+   tf->AddFrame(fF3, fL3);
+   tf->AddFrame(fF5, fL4);
 
    // make tab yellow
    Pixel_t yellow;
@@ -71,7 +50,7 @@ MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
    AddFrame(fTab, new TGLayoutHints(kLHintsBottom | kLHintsExpandX
           | kLHintsExpandY, 2, 2, 5, 1));
    MapSubwindows();
-   Resize();
+   Resize(GetDefaultSize());
    MapWindow();
 }
 
@@ -89,4 +68,14 @@ MyMainFrame::~MyMainFrame() {
    // Clean up used widgets: frames, buttons, layout hints
    fMain->Cleanup();
    delete fMain;
+}
+
+void MyMainFrame::Start()
+{
+   printf("\"Start Filling Hists\" Button Pressed!\n");
+}
+
+void MyMainFrame::Stop()
+{
+   printf("\"Stop Filling Hists\" Button Pressed!\n");
 }
