@@ -13,6 +13,9 @@
 #include <TGNumberEntry.h>
 #include <TGLabel.h>
 #include <TGComboBox.h>
+#include <TGFileDialog.h>
+
+#include "getInput.h"
 
 class LoadDataTab : public TGCompositeFrame
 {
@@ -30,7 +33,7 @@ private:
     // tab 1;
     TGVerticalFrame*   fVFCol1; // column 1 frame
     TGLayoutHints*     fVFLayoutCol1; // column 1 layout
-    std::array<std::string, 6>        col1Labels={"File", "Max Number", "Max Time", "Polarity", "Dynamic Range", "Time Step"};
+    std::array<std::string, 6>        col1Labels={"Bin File", "Max Number", "Max Time", "Polarity", "Dynamic Range", "Time Step"};
     std::array<TGHorizontalFrame*, 6> fHFCol1; // column 1, frames
     TGLayoutHints*     fHFLayoutCol1;
     std::array<TGLabel*, 6>           fLabelCol1;
@@ -40,7 +43,7 @@ private:
     TGNumberEntryField *MaxNum;
     // ULong64_t maxNum_; // max num of pulses
     TGNumberEntryField *MaxTime;
-    ULong64_t maxTime_; // seconds
+    // ULong64_t maxTime_; // seconds
     TGComboBox *Polarity;
     TGComboBox *DynamicRange;
     TGComboBox *TimeStep;
@@ -50,6 +53,7 @@ private:
     // std::array<TGHorizontalFrame*, 6> fHFCol2; // column 2, frames
     // std::array<TGNumberEntry*, 6>     fNECol2; // column 2, number entries
 public:
+    InputParameters* config;
     TGCompositeFrame *fTab;
     LoadDataTab(TGCompositeFrame* fTab_);
     virtual ~LoadDataTab();
@@ -58,46 +62,47 @@ public:
     void ReadMaxNum(char* num);
     void ReadMaxTime(char* tme);
     void HandleCombo(Int_t id);
+    void UpdateContent();
 
 };
 class MyMainFrame : public TGMainFrame {
 private:
-    TGMainFrame         *fMain;
-    TGMenuBar           *fMenuBar; // menu bar
-    TGPopupMenu         *fMenuEntries[2]; // menu items
+    constexpr static Int_t          M_EXIT=100; // must be non-negative
     constexpr static Int_t          M_CONFIG_OPEN=0;
     constexpr static Int_t          M_CONFIG_SAVE=1;
     constexpr static Int_t          M_CONFIG_SAVEAS=2;
     constexpr static Int_t          M_ABOUT=3;
+    TGFileInfo fin;
+    TGFileInfo fOut;
+
+    TGMainFrame         *fMain;
+    TGMenuBar           *fMenuBar; // menu bar
+    TGPopupMenu         *fMenuEntries[2]; // menu items
     // tab
     TGTab *fTab;
     // tab 1, load data
     LoadDataTab* tab1;
-    // // tab 1;
-    // TGVerticalFrame*   fCol1; // column 1 frame
-    // std::vector<std::string>        col1Labels={"Path", "MaxNum", "MaxT", "Polarity", "Vpp", "Resolution"};
-    // TGHorizontalFrame* fFCol1[6]; // column 1, frames
-    // TGLayoutHints*     fLCol1;
-    // TGLabel*           fLabelCol1[6];
-    // TGNumberEntry*     fNCol1[6]; // column 1, number entries
-    // std::vector<std::string>       col2Labels={"ADC bits", "Baseline", "PreTrig", "PreGate", "ShortGate", "LongGate"};
-    // TGVerticalFrame*   fCol2; // column 2 frame
-    // TGHorizontalFrame* fFCol2[6]; // column 2, frames
-    // TGNumberEntry*     fNCol2[6]; // column 2, number entries
 
     TRootEmbeddedCanvas *fEcanvas;
 public:
+    // configurations
+    InputParameters* config;
+
+    MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
+    virtual ~MyMainFrame();
+    // slots
+    // menus
     void Response2Menu(Int_t menu_id); // respond based on menu id
     void LoadConfig(); // load config, id = 0
     void SaveConfig(); // save config, id = 1
     void SaveConfigAs(); // save config as, id = 2
     void DisplayAbout() ;// display program info, id = 3
+    // update entire window
     void DoDraw();
     void Start();
     void Stop();
     int Init();
     void CloseWindow();
-    MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
-    virtual ~MyMainFrame();
+
     ClassDef(MyMainFrame,0)
 };

@@ -195,6 +195,16 @@ public:
      * @param fpath path to user input file
      */
     InputParameters(const std::string fpath);
+    /**
+     * @brief Construct an empty Input Parameters object
+     * 
+     */
+    InputParameters() {channelSettings.push_back(ChannelSettings());}
+    /**
+     * @brief Save settings in a json file. Not Implemented!!
+     * 
+     */
+    void SaveAs();
 
     // ~getInput() {}
 };

@@ -12,21 +12,25 @@ MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h){
 
 void MyMainFrame::CloseWindow() {
    // Got close message for this MainFrame. Terminates the application.
-   gApplication->Terminate();
+   gApplication->Terminate(0);
 }
 
 int MyMainFrame::Init(){
+   // load default settings
+   config = new InputParameters();
    // create a menu bar
    fMenuBar = new TGMenuBar(fMain, 1, 1, kHorizontalFrame);
    // File menus
    fMenuEntries[0] = new TGPopupMenu(gClient->GetRoot());
    fMenuEntries[0]->AddEntry("&Open", M_CONFIG_OPEN);
    fMenuEntries[0]->AddEntry("&Save", M_CONFIG_SAVE);
-   fMenuEntries[0]->AddEntry("Save as", M_CONFIG_SAVEAS);
-   fMenuBar->AddPopup("File", fMenuEntries[0], new TGLayoutHints(kLHintsTop | kLHintsLeft, 0, 4, 0, 0));
+   fMenuEntries[0]->AddEntry("S&ave as", M_CONFIG_SAVEAS);
+   fMenuEntries[0]->AddEntry("&Exit", M_EXIT);
+   fMenuBar->AddPopup("Config", fMenuEntries[0], new TGLayoutHints(kLHintsTop | kLHintsLeft, 0, 4, 0, 0));
    fMenuEntries[0]->Connect("Activated(Int_t)", /* signal */
                      "MyMainFrame", this, /* receiver calls, object*/
                      "Response2Menu(Int_t)");
+
    fMenuEntries[1] = new TGPopupMenu(gClient->GetRoot());
    fMenuEntries[1]->AddEntry("About", M_ABOUT);
    fMenuEntries[1]->Connect("Activated(Int_t)", /* signal */
@@ -40,19 +44,7 @@ int MyMainFrame::Init(){
    //--------- create an empty tab element
    TGCompositeFrame *tf = fTab->AddTab("Load Data");
    tab1 = new LoadDataTab(tf);
-   // fCol1 = new TGVerticalFrame(tf, 200, 150);
-   // tf->AddFrame(fCol1, new TGLayoutHints(kLHintsTop | kLHintsLeft, 2, 2, 2, 2));
-   // fLCol1 = new TGLayoutHints(kLHintsCenterY | kLHintsLeft, 2, 2, 2, 2);
-   // for (int i = 0; i < col1Labels.size(); i++)
-   // {
-   //    fFCol1[i] = new TGHorizontalFrame(fCol1, 200, 30);
-   //    fCol1->AddFrame(fFCol1[i], fLCol1);
-   //    fNCol1[i] = new TGNumberEntry(fFCol1[i], 0, 12, i+10, TGNumberFormat::kNESInteger);
-   //    fFCol1[i]->AddFrame(fNCol1[i], fLCol1);
-   //    fLabelCol1[i] = new TGLabel(fFCol1[i], col1Labels[i].c_str());
-   //    fFCol1[i]->AddFrame(fLabelCol1[i], fLCol1);
-   // }
-   
+   tab1->config = this->config;
 
    //-------------- create a tab element with an embedded canvas and buttons
    tf = fTab->AddTab("Tab 2");
@@ -86,14 +78,6 @@ int MyMainFrame::Init(){
    fMain->AddFrame(fTab, new TGLayoutHints(kLHintsBottom | kLHintsExpandX
           | kLHintsExpandY, 2, 2, 5, 1));
    
-   // // exit button
-   // TGHorizontalFrame *hFrame = new TGHorizontalFrame(fMain, 60, 100);
-   // TGTextButton* exit = new TGTextButton(hFrame, "&Exit");
-   // exit->Connect("Clicked()", "MyMainFrame", this, "CloseWindow()");
-   // hFrame->AddFrame(exit, new TGLayoutHints(kLHintsTop | kLHintsLeft
-   //         | kLHintsExpandX, 2, 2, 2, 2));
-   // fMain->AddFrame(hFrame, new TGLayoutHints(kLHintsBottom | kLHintsRight,
-   //        2, 2, 5, 1));
 
    fMain->MapSubwindows();
    fMain->Resize(GetDefaultSize());
@@ -103,18 +87,66 @@ int MyMainFrame::Init(){
 
 // slots
 void MyMainFrame::LoadConfig() {
-   // load config
+   // delete old config;
+   if (config)
+   {
+      delete config;
+   }
+   
+   static TString dir(".");
+   const char* ReadInTypes[]={ "Json files",    "*.json",
+                                "All files",     "*",
+                                // "ROOT files",    "*.root",
+                                // "ROOT macros",   "*.C",
+                                // "Text files",    "*.[tT][xX][tT]",
+                                0,               0 };
+   fin.fFileTypes = ReadInTypes;
+   fin.SetIniDir(dir);
+   printf("fIniDir = %s\n", fin.fIniDir);
+   new TGFileDialog(gClient->GetRoot(), fMain, kFDOpen, &fin);
+   printf("Open file: %s (dir: %s)\n", fin.fFilename, fin.fIniDir);
+   dir = fin.fIniDir;
+   // load new config
+   config = new InputParameters(fin.fFilename);
+   // update tabs in app window
+   tab1->config = this->config;
+   tab1->UpdateContent();
    printf("Load configuration!\n");
 }
 
 void MyMainFrame::SaveConfig() {
-   // load config
+   // save config
+   if (!fin.fFilename)
+   {
+      SaveConfigAs();
+   }
+   else
+   {
+      config->SaveAs(fin.fFilename);
+   }
    printf("Save configuration!\n");
 }
 
 void MyMainFrame::SaveConfigAs() {
-   // load config
-   printf("Save configuration as xx!\n");
+   // save as config
+   static TString outdir(".");
+   const char* WriteOutTypes[]={ "Json files",    "*.json",
+                                "All files",     "*",
+                                // "ROOT files",    "*.root",
+                                // "ROOT macros",   "*.C",
+                                // "Text files",    "*.[tT][xX][tT]",
+                                0,               0 };
+   fOut.fFileTypes = WriteOutTypes;
+   fOut.SetIniDir(outdir);
+   printf("fIniDir = %s\n", fOut.fIniDir);
+   new TGFileDialog(gClient->GetRoot(), fMain, kFDSave, &fOut);
+   printf("Save file: %s (dir: %s)\n", fOut.fFilename, fOut.fIniDir);
+   outdir = fOut.fIniDir;
+   if (fOut.fFilename)
+   {
+      config->SaveAs(fin.fFilename);
+   }
+   // printf("Save configuration as xx!\n");
 }
 
 void MyMainFrame::DisplayAbout() {
@@ -133,6 +165,9 @@ void MyMainFrame::Response2Menu(Int_t menu_id) {
       break;
    case M_CONFIG_SAVEAS:
       SaveConfigAs();
+      break;
+   case M_EXIT:
+      CloseWindow();
       break;
    case M_ABOUT:
       DisplayAbout();
@@ -158,7 +193,10 @@ MyMainFrame::~MyMainFrame() {
    delete fMenuEntries[0];
    delete fMenuEntries[1];
    delete fMenuBar;
+   delete tab1;
+   delete fTab;
    delete fMain;
+   delete config;
 }
 
 void MyMainFrame::Start()
@@ -172,7 +210,8 @@ void MyMainFrame::Stop()
 }
 
 
-LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_) : fTab(fTab_) {
+LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_)
+ : fTab(fTab_) {
    fVFCol1 = new TGVerticalFrame(fTab, 200, 150);
    fVFLayoutCol1 = new TGLayoutHints(kLHintsTop | kLHintsLeft, 2, 2, 2, 2);
    fTab->AddFrame(fVFCol1, fVFLayoutCol1);
@@ -246,7 +285,7 @@ LoadDataTab::~LoadDataTab()
     {
         delete fLabelCol1[i];
     }
-    for (int i = 0; i < fLabelCol1.size(); i++)
+    for (int i = 0; i < fHFCol1.size(); i++)
     {
         delete fHFCol1[i];
     }
@@ -256,44 +295,91 @@ LoadDataTab::~LoadDataTab()
 
 void LoadDataTab::ReadFilePath(char* txt){
    printf("File path is:%s!\n",txt);
+   config->channelSettings[0].path = txt;
 }
 
 void LoadDataTab::ReadMaxNum(char* num){
    printf("Max num of pulses is: %ld!\n",std::stol(num));
+   config->channelSettings[0].maxNumPulses = std::stol(num);
 }
 
 void LoadDataTab::ReadMaxTime(char* tme){
    printf("Max time is: %ld seconds!\n",std::stol(tme));
+   // TODO
+   // config->channelSettings[0].maxTime = std::stol(tme);
 }
 
 void LoadDataTab::HandleCombo(Int_t id){
    switch (id)
    {
    case M_POLARITY_POS:
+      config->channelSettings[0].polarity = "positive";
       printf("Positive polarity selected!\n");
       break;
    case M_POLARITY_NEG:
+      config->channelSettings[0].polarity = "negative";
       printf("Negative polarity selected!\n");
       break;
    case M_DM_RNG_LOW:
+      config->channelSettings[0].dynamicRange = 0.5;
       printf("0.5 Vpp selected!\n");
       break;
    case M_DM_RNG_HIGH:
+      config->channelSettings[0].dynamicRange = 2.0;
       printf("2.0 Vpp selected!\n");
       break;
    case M_TME_LOW:
+      config->channelSettings[0].timestep = 2;
       printf("2 ns sampling time selected!\n");
       break;
    case M_TME_HIGH:
+      config->channelSettings[0].timestep = 4;
       printf("4 ns sampling time selected!\n");
       break;
    case M_ADC_12:
+      config->channelSettings[0].resolution = 12;
       printf("12 bit ADC selected!\n");
       break;
    case M_ADC_14:
+      config->channelSettings[0].resolution = 14;
       printf("14 bit ADC selected!\n");
       break;
    default:
       break;
+   }
+}
+
+void LoadDataTab::UpdateContent(){
+   // update all wigets in this tab
+   FilePath->SetText(config->channelSettings[0].path.c_str());
+   // FilePath->DoRedraw();
+   MaxNum->SetIntNumber(config->channelSettings[0].maxNumPulses);
+   // TODO
+   // MaxTime->SetIntNumber(config->channelSettings[0].maxTime);
+   if (config->channelSettings[0].polarity=="negative")
+   {
+      Polarity->Select(M_POLARITY_NEG);
+   }
+   else
+   {
+      Polarity->Select(M_POLARITY_NEG);
+   }
+
+   if (config->channelSettings[0].timestep==2)
+   {
+      TimeStep->Select(M_TME_LOW);
+   }
+   else
+   {
+      TimeStep->Select(M_TME_HIGH);
+   }
+
+   if (config->channelSettings[0].dynamicRange < 1)
+   {
+      DynamicRange->Select(M_DM_RNG_LOW);
+   }
+   else
+   {
+      DynamicRange->Select(M_DM_RNG_HIGH);
    }
 }

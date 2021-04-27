@@ -52,6 +52,7 @@ int ChannelSettings::timingSetup()
     }
     return 0;
 }
+
 InputParameters::InputParameters(const std::string fpath)
 {
     // read the JSON input file
