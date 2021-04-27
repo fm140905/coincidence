@@ -204,7 +204,7 @@ public:
      * @brief Save settings in a json file. Not Implemented!!
      * 
      */
-    void SaveAs();
+    int SaveAs(const std::string fpath);
 
     // ~getInput() {}
 };

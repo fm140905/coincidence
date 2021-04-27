@@ -68,6 +68,13 @@ InputParameters::InputParameters(const std::string fpath)
     getCoincidenceSetting();
 }
 
+int InputParameters::SaveAs(const std::string fpath)
+{
+    // save current config as a json file
+    // TODO
+    return 0;
+}
+
 int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSettings& chset)
 {
     if (v.HasMember("Chunksize"))
