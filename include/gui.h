@@ -73,7 +73,6 @@ private:
     constexpr static Int_t          M_CONFIG_SAVEAS=2;
     constexpr static Int_t          M_ABOUT=3;
     TGFileInfo fin;
-    TGFileInfo fOut;
 
     TGMainFrame         *fMain;
     TGMenuBar           *fMenuBar; // menu bar

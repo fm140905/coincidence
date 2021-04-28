@@ -129,7 +129,8 @@ void MyMainFrame::SaveConfig() {
 
 void MyMainFrame::SaveConfigAs() {
    // save as config
-   static TString outdir(".");
+   TGFileInfo fOut;
+   TString outdir(".");
    const char* WriteOutTypes[]={ "Json files",    "*.json",
                                 "All files",     "*",
                                 // "ROOT files",    "*.root",
@@ -144,14 +145,14 @@ void MyMainFrame::SaveConfigAs() {
    outdir = fOut.fIniDir;
    if (fOut.fFilename)
    {
-      config->SaveAs(fin.fFilename);
+      config->SaveAs(fOut.fFilename);
    }
    // printf("Save configuration as xx!\n");
 }
 
 void MyMainFrame::DisplayAbout() {
    // show program info
-   printf("Show help information!\n");
+   printf("Display some help information!\n");
 }
 
 void MyMainFrame::Response2Menu(Int_t menu_id) {

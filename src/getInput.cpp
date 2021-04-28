@@ -86,11 +86,68 @@ int InputParameters::SaveAs(const std::string fpath)
 
     // write current config to jsonOutput
     rapidjson::Value& chDefault = jsonOutput["ChannelSettings"]["Defaults"];
-    // chDefault["MaxNumPulses"] = this->defaultChannelSetting.maxNumPulses;
-    // chDefault["Polarity"] = this->defaultChannelSetting.polarity;
-    rapidjson::Value::MemberIterator iter = chDefault.FindMember("MaxNumPulses");
-    iter->value = rapidjson::Value(this->defaultChannelSetting.maxNumPulses);
-    // TODO
+    rapidjson::Value& channelSpecs = jsonOutput["ChannelSettings"]["ChannelSpecific"];
+    for (int i = 0; i < channelSettings.size(); i++)
+    {
+        ChannelSettings& configCurr = channelSettings[i];
+        rapidjson::Value& chCurr = channelSpecs[i];
+        // ON or OFF
+        if (chCurr.HasMember("ON"))
+            chCurr["ON"].SetBool(true);
+        else
+            chCurr.AddMember("ON", true, jsonOutput.GetAllocator());
+        // File path
+        if (chCurr.HasMember("Path"))
+            chCurr["Path"].SetString(configCurr.path.c_str(), jsonOutput.GetAllocator());
+        else
+        {
+            chCurr.AddMember(rapidjson::StringRef("Path"), 
+                             rapidjson::StringRef(configCurr.path.c_str()), 
+                             jsonOutput.GetAllocator());
+        }
+        // Max num of pulses
+        if (chCurr.HasMember("MaxNumPulses"))
+            chCurr["MaxNumPulses"].SetUint64(configCurr.maxNumPulses);
+        else if (chDefault["MaxNumPulses"].GetUint64() != configCurr.maxNumPulses)
+        {
+            // use static cast to prevent ambiguity
+            // https://github.com/Tencent/rapidjson/issues/873
+            chCurr.AddMember("MaxNumPulses", 
+                             static_cast<uint64_t>(configCurr.maxNumPulses), 
+                             jsonOutput.GetAllocator());
+        }
+        // Polarity
+        if (chCurr.HasMember("Polarity"))
+            chCurr["Polarity"].SetString(configCurr.polarity.c_str(), jsonOutput.GetAllocator());
+        else if (configCurr.polarity != chDefault["Polarity"].GetString())
+        {
+            chCurr.AddMember(rapidjson::StringRef("Polarity"), 
+                             rapidjson::StringRef(configCurr.polarity.c_str()), 
+                             jsonOutput.GetAllocator());   
+        }
+        // Dynamic range
+        if (chCurr.HasMember("Dynamicrange"))
+            chCurr["Dynamicrange"].SetDouble(configCurr.dynamicRange);
+        else if (configCurr.dynamicRange != chDefault["Dynamicrange"].GetDouble())
+            chCurr.AddMember("Dynamicrange", configCurr.dynamicRange, jsonOutput.GetAllocator());   
+        // time step
+        if (chCurr.HasMember("TimeStep"))
+            chCurr["TimeStep"].SetUint(configCurr.timestep);
+        else if (configCurr.timestep != chDefault["TimeStep"].GetUint())
+            chCurr.AddMember("TimeStep", configCurr.timestep, jsonOutput.GetAllocator());   
+        // TODO
+        
+    }
+    
+    // rapidjson::Value::MemberIterator iter = chDefault.FindMember("MaxNumPulses");
+    // iter->value.SetUint64(this->defaultChannelSetting.maxNumPulses);
+    // iter = chDefault.FindMember("Polarity");
+    // iter->value.SetString(this->defaultChannelSetting.polarity.c_str(), jsonOutput.GetAllocator());
+    // iter = chDefault.FindMember("Dynamicrange");
+    // iter->value.SetDouble(this->defaultChannelSetting.dynamicRange);
+    // iter = chDefault.FindMember("TimeStep");
+    // iter->value.SetUint(this->defaultChannelSetting.timestep);
+    // // TODO
 
     // write jsonOutput to fpath
     std::ofstream ofs(fpath);
