@@ -62,6 +62,7 @@ InputParameters::InputParameters(const std::string fpath)
     }
     rapidjson::IStreamWrapper isw(ifs);
     jsonInput.ParseStream<rapidjson::kParseCommentsFlag>(isw);
+    ifs.close();
 
     getDefaultChannelSetting();
     getSpecificChannelSettings();
@@ -71,7 +72,37 @@ InputParameters::InputParameters(const std::string fpath)
 int InputParameters::SaveAs(const std::string fpath)
 {
     // save current config as a json file
+
+    // load default config
+    std::ifstream ifs("defaults.json");
+    if (!ifs.good())
+    {
+        throw std::invalid_argument("Cannot find defaults.json in current directory.");
+    }
+    rapidjson::IStreamWrapper isw(ifs);
+    rapidjson::Document jsonOutput;
+    jsonOutput.ParseStream<rapidjson::kParseCommentsFlag>(isw);
+    // ifs.close();
+
+    // write current config to jsonOutput
+    rapidjson::Value& chDefault = jsonOutput["ChannelSettings"]["Defaults"];
+    // chDefault["MaxNumPulses"] = this->defaultChannelSetting.maxNumPulses;
+    // chDefault["Polarity"] = this->defaultChannelSetting.polarity;
+    rapidjson::Value::MemberIterator iter = chDefault.FindMember("MaxNumPulses");
+    iter->value = rapidjson::Value(this->defaultChannelSetting.maxNumPulses);
     // TODO
+
+    // write jsonOutput to fpath
+    std::ofstream ofs(fpath);
+    if (!ofs.good())
+    {
+        throw std::invalid_argument("Cannot open " + fpath);
+    }
+    rapidjson::OStreamWrapper osw(ofs);
+    rapidjson::PrettyWriter<rapidjson::OStreamWrapper> writer(osw);
+    jsonOutput.Accept(writer);
+    
+    
     return 0;
 }
 

@@ -20,6 +20,8 @@
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
+#include <rapidjson/prettywriter.h>
+// #include <rapidjson/
 
 /**
  * Saves user input parameters for processing single channel data. 
