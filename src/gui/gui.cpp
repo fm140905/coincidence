@@ -104,14 +104,18 @@ void MyMainFrame::LoadConfig() {
    fin.SetIniDir(dir);
    printf("fIniDir = %s\n", fin.fIniDir);
    new TGFileDialog(gClient->GetRoot(), fMain, kFDOpen, &fin);
-   printf("Open file: %s (dir: %s)\n", fin.fFilename, fin.fIniDir);
-   dir = fin.fIniDir;
-   // load new config
-   config = new InputParameters(fin.fFilename);
-   // update tabs in app window
-   tab1->config = this->config;
-   tab1->UpdateContent();
-   printf("Load configuration!\n");
+   if (fin.fFilename)
+   {
+      // if a config file is selected
+      printf("Open file: %s (dir: %s)\n", fin.fFilename, fin.fIniDir);
+      dir = fin.fIniDir;
+      // load new config
+      config = new InputParameters(fin.fFilename);
+      // update tabs in app window
+      tab1->config = this->config;
+      tab1->UpdateContent();
+      printf("Load configuration!\n");
+   }
 }
 
 void MyMainFrame::SaveConfig() {
@@ -123,8 +127,9 @@ void MyMainFrame::SaveConfig() {
    else
    {
       config->SaveAs(fin.fFilename);
+      // printf("Save configuration!\n");
+      printf("Save config file: %s (dir: %s)\n", fin.fFilename, fin.fIniDir);
    }
-   printf("Save configuration!\n");
 }
 
 void MyMainFrame::SaveConfigAs() {
@@ -141,13 +146,17 @@ void MyMainFrame::SaveConfigAs() {
    fOut.SetIniDir(outdir);
    printf("fIniDir = %s\n", fOut.fIniDir);
    new TGFileDialog(gClient->GetRoot(), fMain, kFDSave, &fOut);
-   printf("Save file: %s (dir: %s)\n", fOut.fFilename, fOut.fIniDir);
-   outdir = fOut.fIniDir;
    if (fOut.fFilename)
    {
-      config->SaveAs(fOut.fFilename);
+      outdir = fOut.fIniDir;
+      if (fOut.fFilename)
+      {
+         config->SaveAs(fOut.fFilename);
+      }
+      printf("Save config file: %s (dir: %s)\n", fOut.fFilename, fOut.fIniDir);
+      // printf("Save configuration as xx!\n");
    }
-   // printf("Save configuration as xx!\n");
+   
 }
 
 void MyMainFrame::DisplayAbout() {
@@ -363,7 +372,7 @@ void LoadDataTab::UpdateContent(){
    }
    else
    {
-      Polarity->Select(M_POLARITY_NEG);
+      Polarity->Select(M_POLARITY_POS);
    }
 
    if (config->channelSettings[0].timestep==2)
