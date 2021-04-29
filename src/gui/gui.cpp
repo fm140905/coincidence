@@ -8,6 +8,13 @@ MyMainFrame::MyMainFrame(const TGWindow *p,UInt_t w,UInt_t h){
    fMain->Connect("CloseWindow()", "MyMainFrame", this, "CloseWindow()");
    // create layout
    Init();
+   // popup window
+   fMain->SetWindowName("CoMPASS Data Processing Tool");
+   fMain->MapSubwindows();
+   fMain->Resize(fMain->GetDefaultSize());
+   fMain->Resize(w, h);
+   fMain->MapWindow();
+   
 }
 
 void MyMainFrame::CloseWindow() {
@@ -23,6 +30,7 @@ int MyMainFrame::Init(){
    // File menus
    fMenuEntries[0] = new TGPopupMenu(gClient->GetRoot());
    fMenuEntries[0]->AddEntry("&Open", M_CONFIG_OPEN);
+   // fMenuEntries[0]->AddEntry(Form("%-20s\t%6s", "Open", "ctrl+o"), M_CONFIG_OPEN);
    fMenuEntries[0]->AddEntry("&Save", M_CONFIG_SAVE);
    fMenuEntries[0]->AddEntry("S&ave as", M_CONFIG_SAVEAS);
    fMenuEntries[0]->AddEntry("&Exit", M_EXIT);
@@ -78,10 +86,6 @@ int MyMainFrame::Init(){
    fMain->AddFrame(fTab, new TGLayoutHints(kLHintsBottom | kLHintsExpandX
           | kLHintsExpandY, 2, 2, 5, 1));
    
-
-   fMain->MapSubwindows();
-   fMain->Resize(GetDefaultSize());
-   fMain->MapWindow();
    return 0;
 }
 
@@ -231,28 +235,33 @@ LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_)
    {
       fHFCol1[i] = new TGHorizontalFrame(fVFCol1, 200, 30);
       fVFCol1->AddFrame(fHFCol1[i], fHFLayoutCol1);
-      // fNCol1[i] = new TGNumberEntry(fFCol1[i], 0, 12, i+10, TGNumberFormat::kNESInteger);
-      // fFCol1[i]->AddFrame(fNCol1[i], fLCol1);
    }
    for (int i = 0; i < col1Labels.size(); i++)
    {
-      fLabelCol1[i] = new TGLabel(fHFCol1[i], col1Labels[i].c_str());
+      fLabelCol1[i] = new TGLabel(fHFCol1[i], Form("%-15s\t%1s", col1Labels[i].c_str(), " "));
       fHFCol1[i]->AddFrame(fLabelCol1[i], fHFLayoutCol1);
    }
 
    FilePathBuf = new TGTextBuffer(100);
    FilePathBuf->AddText(0, "Data path");
-   FilePath = new TGTextEntry(fHFCol1[0], FilePathBuf, 10);
    // FilePath = new TGTextEntry(fHFCol1[0], "Data path", 10);
+   FilePath = new TGTextEntry(fHFCol1[0], FilePathBuf, 10);
+   FilePath->Resize(500, FilePath->GetDefaultHeight());
    FilePath->Connect("TextChanged(char*)", "LoadDataTab", this, "ReadFilePath(char*)");
    fHFCol1[0]->AddFrame(FilePath, fHFLayoutCol1);
 
    // maxNum_ = 1E6;
    MaxNum = new TGNumberEntryField(fHFCol1[1], 11, 1E6, TGNumberFormat::kNESInteger);
+   MaxNum->SetAlignment(kTextLeft);
+   MaxNum->SetLimits(TGNumberEntryField::kNELLimitMin, 1);
+   MaxNum->Resize(100, 20);
    MaxNum->Connect("TextChanged(char*)", "LoadDataTab", this, "ReadMaxNum(char*)");
    fHFCol1[1]->AddFrame(MaxNum, fHFLayoutCol1);
 
-   MaxTime = new TGNumberEntryField(fHFCol1[2], 12, 1E6, TGNumberFormat::kNESInteger);
+   MaxTime = new TGNumberEntryField(fHFCol1[2], 12, 1E6, TGNumberFormat::kNESReal);
+   MaxTime->SetAlignment(kTextLeft);
+   MaxTime->SetLimits(TGNumberEntryField::kNELLimitMin, 0);
+   MaxTime->Resize(100, 20);
    MaxTime->Connect("TextChanged(char*)", "LoadDataTab", this, "ReadMaxTime(char*)");
    fHFCol1[2]->AddFrame(MaxTime, fHFLayoutCol1);
 
@@ -260,7 +269,7 @@ LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_)
    Polarity->AddEntry("Positive", M_POLARITY_POS); // positve <=> id = 0
    Polarity->AddEntry("Negative", M_POLARITY_NEG); // negative <=> id = 1
    Polarity->Select(M_POLARITY_NEG); // default value
-   Polarity->Resize(150, 20);
+   Polarity->Resize(100, 20);
    Polarity->Connect("Selected(Int_t)", "LoadDataTab", this, "HandleCombo(Int_t)");
    fHFCol1[3]->AddFrame(Polarity, fHFLayoutCol1);
 
@@ -268,7 +277,7 @@ LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_)
    DynamicRange->AddEntry("0.5 Vpp", M_DM_RNG_LOW); // 0.5 Vpp <=> id = 10
    DynamicRange->AddEntry("2.0 Vpp", M_DM_RNG_HIGH); // 2.0 Vpp <=> id = 11
    DynamicRange->Select(M_DM_RNG_HIGH); // default value
-   DynamicRange->Resize(150, 20);
+   DynamicRange->Resize(100, 20);
    DynamicRange->Connect("Selected(Int_t)", "LoadDataTab", this, "HandleCombo(Int_t)");
    fHFCol1[4]->AddFrame(DynamicRange, fHFLayoutCol1);
 
@@ -276,7 +285,7 @@ LoadDataTab::LoadDataTab(TGCompositeFrame* fTab_)
    TimeStep->AddEntry("2 ns", M_TME_LOW); // 2ns <=> id = 20
    TimeStep->AddEntry("4 ns", M_TME_HIGH); // 4ns <=> id = 21
    TimeStep->Select(M_TME_LOW); // default value
-   TimeStep->Resize(150, 20);
+   TimeStep->Resize(100, 20);
    TimeStep->Connect("Selected(Int_t)", "LoadDataTab", this, "HandleCombo(Int_t)");
    fHFCol1[5]->AddFrame(TimeStep, fHFLayoutCol1);
 
@@ -314,7 +323,7 @@ void LoadDataTab::ReadMaxNum(char* num){
 }
 
 void LoadDataTab::ReadMaxTime(char* tme){
-   printf("Max time is: %ld seconds!\n",std::stol(tme));
+   printf("Max time is: %f seconds!\n",std::stod(tme));
    // TODO
    // config->channelSettings[0].maxTime = std::stol(tme);
 }
