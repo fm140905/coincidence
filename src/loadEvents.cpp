@@ -62,7 +62,7 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
     }
 
     // calculate pulse height and height index
-    UShort_t heightindex; 
+    Int_t heightindex; 
     getPulseHeight(voltage, heightindex);
     
     // calculate pulse integral and psd ratio
@@ -83,7 +83,7 @@ int Event::parse(const char* buffer, ULong64_t& bufIndex, std::vector<Double_t>&
     return 0;
 }
 
-int Event::getPulseHeight(const std::vector<Double_t>& v, UShort_t& heightindex)
+int Event::getPulseHeight(const std::vector<Double_t>& v, Int_t& heightindex)
 {
     heightindex = std::max_element(v.begin(), v.end()) - v.begin();
     height = *(v.begin() + heightindex);
@@ -115,7 +115,7 @@ int Event::calibration()
     return 0;
 }
 
-int Event::rejection(const std::vector<Double_t>& v, const UShort_t& i)
+int Event::rejection(const std::vector<Double_t>& v, const Int_t& i)
 {
     if (isGood && channelSetting.rejection)
     {

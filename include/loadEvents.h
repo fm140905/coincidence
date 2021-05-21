@@ -38,7 +38,7 @@ private:
      * @param heightindex Index of the highest point of the pulse.
      * @return int 
      */
-    int getPulseHeight(const std::vector<Double_t>& v, UShort_t& heightindex);
+    int getPulseHeight(const std::vector<Double_t>& v, Int_t& heightindex);
     /**
      * @brief Get the total integral of an event.
      * 
@@ -59,7 +59,7 @@ private:
      * @param i Index of the highest point of the pulse.
      * @return int 
      */
-    int rejection(const std::vector<Double_t>& v, const UShort_t& i);
+    int rejection(const std::vector<Double_t>& v, const Int_t& i);
     /**
      * @brief Reject pil-up pulses. To be implemented.
      * 
