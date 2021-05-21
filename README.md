@@ -9,7 +9,7 @@
 - Install `root`(v6.20 or above), `cmake` and `git`.
 - Open a new terminal and run 
     ```bash
-    git clone --single-branch --branch dev https://github.com/fm140905/coincidence.git
+    git clone https://github.com/fm140905/coincidence.git
     ```
 - `cd` into the repo that you have just cloned.
 - Run 
