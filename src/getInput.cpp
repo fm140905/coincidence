@@ -169,6 +169,24 @@ int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSetting
             chset.lowVoltageThreshold = v["Rejection"]["LowVoltageThreshold"].GetDouble();
         if (v["Rejection"].HasMember("ClipRejection"))
             chset.clipRejection = v["Rejection"]["ClipRejection"].GetBool();
+        if (v["Rejection"].HasMember("PileupRejection")) {
+            if (v["Rejection"]["PileupRejection"].HasMember("ON"))
+            {
+                chset.pileupRejection = v["Rejection"]["PileupRejection"]["ON"].GetBool();
+            }
+            if (v["Rejection"]["PileupRejection"].HasMember("RiseTime"))
+            {
+                chset.riseTime = v["Rejection"]["PileupRejection"]["RiseTime"].GetInt();
+            }
+            if (v["Rejection"]["PileupRejection"].HasMember("MinimumPeakRatio"))
+            {
+                chset.peakRatioLowerThreshold = v["Rejection"]["PileupRejection"]["MinimumPeakRatio"].GetDouble();
+            }
+            if (v["Rejection"]["PileupRejection"].HasMember("MinimumPeakHeight"))
+            {
+                chset.peakHeightLowerThreshold = v["Rejection"]["PileupRejection"]["MinimumPeakHeight"].GetDouble();
+            }
+        }
     }
 
     if (v.HasMember("EnergyCut")){
@@ -353,6 +371,10 @@ int InputParameters::getSpecificChannelSettings()
             channelI.timingSetup();
         }
         
+        channelI.riseTime = channelI.riseTime / channelI.timestep;
+        if (channelI.riseTime <= 0)
+            channelI.riseTime = 1;
+
         channelSettings.push_back(channelI);
     }
 

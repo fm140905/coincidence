@@ -72,6 +72,10 @@ public:
     bool zeroSupression=false; // enable zero supression if true
     double lowVoltageThreshold=0.01; // minimum pulse amplitude for zero supression
     bool clipRejection=false; // reject clipped pulse if true
+    bool pileupRejection=false; // reject piled-up pulses if true
+    int riseTime=4; // pulse rising time, in number of samples
+    double peakRatioLowerThreshold=0.05; // minimum ratio between two peak heights in a piledup pulse
+    double peakHeightLowerThreshold=0.015; // minimum detectable peak height, in volt
 
     bool energyCut=false; // enable energy cut if true
     double EnergyLowerThreshold=0.0; // lower energy threshold for energy cut

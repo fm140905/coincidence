@@ -36,9 +36,15 @@
 
             "Rejection": {
                 "ON": false,
-                "ZeroSupression": true,
+                "ZeroSupression": false,
                 "LowVoltageThreshold": 0.05,
-                "ClipRejection": true
+                "ClipRejection": false,
+                "PileupRejection": {
+                    "ON": false,
+                    "RiseTime": 10, // ns
+                    "MinimumPeakRatio": 0.1,
+                    "MinimumPeakHeight": 0.015 // Volt
+                }
             },
 
             "EnergyCut": {
@@ -58,7 +64,7 @@
             },
             
             "Timing": {
-                "ON": true,
+                "ON": false,
                 "Method": "DCFD", //DCFD
                 "Interpolation": 8,
                 "Fraction": 0.4,
@@ -130,7 +136,7 @@
     },
     "CoincidenceSettings": 
     {
-        "ON": true,
+        "ON": false,
         "CoincidenceChannels": [0, 1],
         "TimeWindow": 200,
         "SaveTimeDifference": true,

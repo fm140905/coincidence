@@ -61,11 +61,13 @@ private:
      */
     int rejection(const std::vector<Double_t>& v, const Int_t& i);
     /**
-     * @brief Reject pil-up pulses. To be implemented.
+     * @brief Reject pil-up pulses.
      * 
+     * @param v The digitized pulse in volts.
+     * @param heightIndex Index of the highest point of the pulse.
      * @return int 
      */
-    int pileupRejection();
+    int pileupRejection(const std::vector<Double_t>& v, const Int_t heightIndex);
     /**
      * @brief Perform energy cut.
      * 

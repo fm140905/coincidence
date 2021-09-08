@@ -40,7 +40,13 @@
                 "ON": false,
                 "ZeroSupression": true,
                 "LowVoltageThreshold": 0.05,
-                "ClipRejection": true
+                "ClipRejection": true,
+                "PileupRejection": {
+                    "ON": true,
+                    "RiseTime": 16, // ns
+                    "MinimumPeakRatio": 0.2,
+                    "MinimumPeakHeight": 0.1 // Volt
+                }
             },
 
             "EnergyCut": {

@@ -134,11 +134,41 @@ int Event::rejection(const std::vector<Double_t>& v, const Int_t& i)
             }
         }
 
-        // TODO
-        // if (isGood && channelSetting.pileupRejection)
-        // {
-        //     pileupRejection();
-        // }
+        if (isGood && channelSetting.pileupRejection)
+        {
+            pileupRejection(v, i);
+        }
+    }
+    return 0;
+}
+
+int Event::pileupRejection(const std::vector<Double_t>& v, const Int_t heightIndex)
+{
+    const int dpjump = channelSetting.riseTime;
+    const float dpf = channelSetting.peakRatioLowerThreshold; // double pulse fraction
+    const float threshV = channelSetting.peakHeightLowerThreshold; // the noise level
+    float deltaV = 0;
+        
+    for (int j = heightIndex; j < channelSetting.length - dpjump; j++)
+    {
+        // detect the rising edge of the second pulse after the trigger pulse
+        deltaV = v[j+dpjump] - v[j];
+        // threshV = 
+        if (deltaV > dpf * height && deltaV > threshV)
+        {
+            isGood = false;
+            return 0;
+        }
+    }
+    for (int j = 0; j < heightIndex - 2 * dpjump; j++)
+    {
+        // detect the rising edge of the second pulse before the trigger pulse
+        deltaV = v[j+dpjump] - v[j];
+        if (deltaV > dpf * height && deltaV > threshV)
+        {
+            isGood=false;
+            return 0;
+        }
     }
     return 0;
 }

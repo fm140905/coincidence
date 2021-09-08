@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:40:21
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-06 16:50:15
+ * @LastEditTime: 2021-09-08 17:04:45
 -->
 
 ## Structure
@@ -51,6 +51,10 @@ The json file consits of two parts:
     - `ZeroSupression`: enable zero supression if true.
     - `LowVoltageThreshold`: minimum pulse height for zero supression.
     - `ClipRejection`: reject clipped pulse if true.
+    - `PileupRejection`: piled-up pulse rejection
+        - `ON`: enable piledup rejection if true
+        - `RiseTime`: length of pulse rising edge, in ns.
+        - `MinimumPeakRatio` and `MinimumPeakHeight`: pulse classified as piledup if ratio of two peaks > `MinimumPeakRatio` **AND** both peak heights > `MinimumPeakHeight`
 
 - `EnergyCut`: energy cut. Calibration needs to be enabled. 
     - `ON`: enable energy cut if true.

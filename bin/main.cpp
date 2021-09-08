@@ -12,6 +12,7 @@
 
 #include "TCanvas.h"
 #include "TError.h"
+#include "TStyle.h"
 
 #include "../include/getInput.h"
 #include "../include/loadEvents.h"
@@ -28,6 +29,11 @@ int main(int argc, char** argv)
     if (stat("output", &st) == -1) {
         mkdir("output", 0700);
     }
+    // set stat box positions
+    gStyle->SetStatY(0.9);
+    gStyle->SetStatX(0.9);
+    // gStyle->SetStatW(0.2);
+    // gStyle->SetStatH(0.1);
     auto startTime = std::chrono::high_resolution_clock::now();
     const std::string settingFilePath(argv[1]);
     const InputParameters settings(settingFilePath);

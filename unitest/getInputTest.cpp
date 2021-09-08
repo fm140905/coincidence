@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-07 21:33:10
+ * @LastEditTime: 2021-09-08 16:55:15
  */
 
 #include <gtest/gtest.h>
@@ -85,6 +85,10 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_TRUE(ch0.zeroSupression);
     EXPECT_DOUBLE_EQ(ch0.lowVoltageThreshold, 0.05);
     EXPECT_TRUE(ch0.clipRejection);
+    EXPECT_TRUE(ch0.pileupRejection);
+    EXPECT_EQ(ch0.riseTime, 8);
+    EXPECT_DOUBLE_EQ(ch0.peakRatioLowerThreshold, 0.2);
+    EXPECT_DOUBLE_EQ(ch0.peakHeightLowerThreshold, 0.1);
     
     EXPECT_FALSE(ch0.energyCut);
     EXPECT_DOUBLE_EQ(ch0.EnergyLowerThreshold, 0.0);
