@@ -10,10 +10,11 @@ cd ..
 mkdir -p build
 cd build
 cmake ..
-make
+# make
+cmake --build .
 cd ../test
 pwd
 cp ../bin/main .
-./main test.json
+./main -i test.json
 
 ./compareOutput.sh

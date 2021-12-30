@@ -72,7 +72,7 @@ int Channel::loadEvents()
                 }
             }
         }
-        std::cout <<  "Total counts = " << currentNumber << '\t'
+        std::cout << " Total counts = " << currentNumber << '\t'
                   << " good counts = " << goodCounts << '\t'
                   << " rejected counts = " << badCounts << '\n';
     }

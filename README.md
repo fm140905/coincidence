@@ -17,7 +17,7 @@
   mkdir -p build
   cd build
   cmake ..
-  make
+  cmake --build .
   ```
   to compile the project.
 
@@ -36,10 +36,19 @@
     - Differences of arrival times (TOF) are saved for each channel.
 
 ## Run
-- Copy the executable `main` and input file `input.json` in `bin` folder to anywhere you like.
+- Copy the executable `main` and input file `input.json` in `bin` folder to your working directory.
 - Edit the settings in `input.json` if necessary. Explanation of the parameters can be found in `Inuput file explained.md`.
-- Run
+- Under your working directory, run
     ```bash
-    ./main $(path-to-input.json)
+    ./main -i ${path-to-input.json}
+    ```
+    Possible command line options are:
+    ```
+    -h
+        Output this text; Script is not executed.
+    -i FILE
+        Load parameters from FILE and prcoess data.
+    -d
+        Display results, including pulses, spectra, and PSD.
     ```
 - Outfiles are saved in `output` directory.

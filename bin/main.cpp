@@ -13,7 +13,9 @@
 #include "TCanvas.h"
 #include "TError.h"
 #include "TStyle.h"
+#include "TApplication.h"
 
+#include "../include/cmdParser.h"
 #include "../include/getInput.h"
 #include "../include/loadEvents.h"
 #include "../include/loadChannel.h"
@@ -21,6 +23,28 @@
 
 int main(int argc, char** argv)
 {
+    // parse command line input
+    CmdParser cmdinput(argc, argv);
+    if(cmdinput.cmdOptionExists("-h")){
+        std::cout << std::endl;
+        std::cout << "---Script to process binary data saved by CoMPASS---" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage: main [options]" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Possible options are:" << std::endl;
+        std::cout << "\t -h\n\t\tOutput this text; Script is not executed." << std::endl;
+        std::cout << "\t -i FILE\n\t\tLoad parameters from FILE and prcoess data." << std::endl;
+        std::cout << "\t -d\n\t\tDisplay results, including pulses, spectra, and PSD." << std::endl;
+        std::cout << std::endl;
+        return 0;
+    }
+    // get path of input json file 
+    const std::string settingFilePath = cmdinput.getCmdOption("-i");
+    if (settingFilePath.empty()){
+        std::cout << "Invalid input json file path." << std::endl;
+        return 1;
+    }
+
     // supress root mesg
     gErrorIgnoreLevel = kWarning;
     // create output directory
@@ -32,10 +56,10 @@ int main(int argc, char** argv)
     // set stat box positions
     gStyle->SetStatY(0.9);
     gStyle->SetStatX(0.9);
-    // gStyle->SetStatW(0.2);
-    // gStyle->SetStatH(0.1);
+    //Tapplication to display results
+    TApplication* myapp = new TApplication("PALS", 0, 0);
+
     auto startTime = std::chrono::high_resolution_clock::now();
-    const std::string settingFilePath(argv[1]);
     const InputParameters settings(settingFilePath);
     std::vector<std::shared_ptr<Channel>> coincidenceChannels;
     
@@ -57,56 +81,56 @@ int main(int argc, char** argv)
         if (chseti.plotGoodPulses)
         {
             plotname = "Good pulses_channel " + std::to_string(chseti.channelNumber);
-            std::unique_ptr<TCanvas> goodPulseCanvasCHI(new TCanvas(plotname.c_str(), "Good pulses", 200, 10, 700, 500));
+            TCanvas goodPulseCanvasCHI(plotname.c_str(), "Good pulses", 200, 10, 700, 500);
+            auto cp = goodPulseCanvasCHI.DrawClone();
             channelI->getGoodPulseGraph(plotname);
             channelI->goodPulseGraph.DrawClone("A PLC PMC");
-            goodPulseCanvasCHI->DrawClone();
             outname = "output/"+plotname + ".png";
-            goodPulseCanvasCHI->SaveAs(outname.c_str());
+            cp->SaveAs(outname.c_str());
         }
 
         if (chseti.plotBadPulses)
         {
             plotname = "Rejected pulses_channel " + std::to_string(chseti.channelNumber);
-            std::unique_ptr<TCanvas> badPulseCanvasCHI(new TCanvas(plotname.c_str(), "Rejected pulses", 200, 10, 700, 500));
+            TCanvas badPulseCanvasCHI(plotname.c_str(), "Rejected pulses", 200, 10, 700, 500);
+            auto cp = badPulseCanvasCHI.DrawClone();
             channelI->getBadPulseGraph(plotname);
             channelI->badPulseGraph.DrawClone("A PLC PMC");
-            badPulseCanvasCHI->DrawClone();
             outname = "output/"+plotname + ".png";
-            badPulseCanvasCHI->SaveAs(outname.c_str());
+            cp->SaveAs(outname.c_str());
         }
         
         if (chseti.plotPHD)
         {
             plotname = "PHD_channel " + std::to_string(chseti.channelNumber);
-            std::unique_ptr<TCanvas> PHDCanvasCHI(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+            TCanvas PHDCanvasCHI(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500);
+            auto cp = PHDCanvasCHI.DrawClone();
             channelI->getPHD(plotname);
             channelI->PHD.DrawClone();
-            PHDCanvasCHI->DrawClone();
             outname = "output/"+plotname + ".png";
-            PHDCanvasCHI->SaveAs(outname.c_str());
+            cp->SaveAs(outname.c_str());
         }
 
         if (chseti.plotPID)
         {
             plotname = "PID_channel " + std::to_string(chseti.channelNumber);
-            std::unique_ptr<TCanvas> PIDCanvasCHI(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+            TCanvas PIDCanvasCHI(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500);
+            auto cp = PIDCanvasCHI.DrawClone();
             channelI->getPID(plotname);
             channelI->PID.DrawClone();
-            PIDCanvasCHI->DrawClone();
             outname = "output/"+plotname + ".png";
-            PIDCanvasCHI->SaveAs(outname.c_str());
+            cp->SaveAs(outname.c_str());
         }
 
         if (chseti.plotPSD)
         {
             plotname = "PSD_channel " + std::to_string(chseti.channelNumber);
-            std::unique_ptr<TCanvas> PSDCanvasCHI(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+            TCanvas PSDCanvasCHI(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500);
+            auto cp = PSDCanvasCHI.DrawClone();
             channelI->getPSD(plotname);
             channelI->PSD.DrawClone("COLZ");
-            PSDCanvasCHI->DrawClone();
             outname = "output/"+plotname + ".png";
-            PSDCanvasCHI->SaveAs(outname.c_str());
+            cp->SaveAs(outname.c_str());
         }
 
         if (chseti.savePulses)
@@ -156,21 +180,21 @@ int main(int argc, char** argv)
         if (coinset.plotTOF)
         {
             plotname = "TOF_Header";
-            std::unique_ptr<TCanvas> TOFCanvas(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+            TCanvas TOFCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500);
+            auto cp = TOFCanvas.DrawClone();
             coin.getTOFHeader(plotname);
             coin.TOFHeader.DrawClone();
-            TOFCanvas->DrawClone();
-            TOFCanvas->SaveAs("output/TOF_Header.png");
+            cp->SaveAs("output/TOF_Header.png");
 
             // check if CFD timing enabled for both channels
             if (coin.channel0.channelSetting.timing && coin.channel1.channelSetting.timing)
             {
                 plotname = "TOF_CFD";
-                std::unique_ptr<TCanvas> TOFCanvas(new TCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500));
+                TCanvas TOFCFDCanvas(plotname.c_str(), plotname.c_str(), 200, 10, 700, 500);
+                auto cp = TOFCFDCanvas.DrawClone();
                 coin.getTOFDIACFD(plotname);
                 coin.TOFDIACFD.DrawClone();
-                TOFCanvas->DrawClone();
-                TOFCanvas->SaveAs("output/TOF_CFD.png");
+                cp->SaveAs("output/TOF_CFD.png");
             }
         }
 
@@ -189,7 +213,12 @@ int main(int argc, char** argv)
     
     
     auto endTime = std::chrono::high_resolution_clock::now();
-    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms" << std::endl; 
-    // myapp->Run();
+    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms" << std::endl;
+    // display results if required
+    if(cmdinput.cmdOptionExists("-d"))
+    {
+        std::cout << "Press ctrl+c to exit.." << std::endl;
+        myapp->Run();
+    }
     return 0;
 }
