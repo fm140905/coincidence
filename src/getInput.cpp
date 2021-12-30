@@ -316,6 +316,9 @@ int InputParameters::getDefaultChannelSetting()
 
 int InputParameters::getSpecificChannelSettings()
 {
+    assert(jsonInput.HasMember("ChannelSettings"));
+    assert(jsonInput["ChannelSettings"].HasMember("ChannelSpecific"));
+
     const rapidjson::Value& channelSpecs_=jsonInput["ChannelSettings"]["ChannelSpecific"];
     assert(channelSpecs_.IsArray());
     for (rapidjson::SizeType i = 0; i < channelSpecs_.Size(); i++){
@@ -383,6 +386,11 @@ int InputParameters::getSpecificChannelSettings()
 
 int InputParameters::getCoincidenceSetting()
 {
+    if(!jsonInput.HasMember("CoincidenceSettings"))
+    {
+        // no coincidence settings
+        return 0;
+    }
     const rapidjson::Value& coinSets_=jsonInput["CoincidenceSettings"];
     coincidenceSetting.coincidence=coinSets_["ON"].GetBool();
     if (!coincidenceSetting.coincidence)

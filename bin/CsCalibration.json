@@ -1,0 +1,66 @@
+// Post processing input in json format
+// use //... and /* ... */ for single-line and multi-line comments
+{
+    "ChannelSettings":
+    {
+        "Defaults":
+        {
+            "MaxNumPulses": 1000000,
+            "Polarity": "negative",
+            "Dynamicrange": 2.0,
+            "TimeStep": 2,
+            "Resolution": 14,
+            "Headers": [2,2,8,2,2,4,4],
+            "SampleSize": 2,
+            // "DCOffset": 0.2,
+            "BaselineSamples": 8,
+            "SavePulses": 0, // number of pulses to be saved
+
+            "PreTrigger": 72,
+            "Gates": {
+                "PreGate": 20,
+                "ShortGate":30,
+                "LongGate": 100
+            },
+
+            "PlotPulses":{
+                "Good pulses": {
+                    "ON": true,
+                    "Number": 100
+                },
+                "Rejected pulses": {
+                    "ON": true,
+                    "Number": 100
+                }
+            },
+
+            "Plot Pulse Height Distribution": {
+                "ON":true,
+                "Calibrated": false,
+                "xmin": 0,
+                "xmax": 2,
+                "Bins": 150
+            },
+
+            "Plot Pulse Integral Distribution": {
+                "ON":true,
+                "Calibrated": false,
+                "xmin": 0,
+                "xmax": 10,
+                "Bins": 150
+            }
+        },
+        "ChannelSpecific":[
+            {
+                "ON": true,
+                "ChannelNumber": 0,
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel0.bin"
+            },
+            {
+                "ON": true,
+                "ChannelNumber": 1,
+                "Path": "/home/mingf2/projects/coincidence/test/testdata/channel1.bin"
+            }
+        ]
+    }
+}
