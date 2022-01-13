@@ -191,9 +191,9 @@ int Event::PSDCut()
 {
     if (isGood && channelSetting.PSDCut)
     {
-        double psdRatio = tailIntegral / totalIntegral;
         if (channelSetting.lazyCut)
         {
+            double psdRatio = tailIntegral / totalIntegral;
             if (psdRatio < channelSetting.PSDLowerThreshold ||
                 psdRatio > channelSetting.PSDUpperThreshold)
             {
@@ -205,7 +205,7 @@ int Event::PSDCut()
             double tmp = (channelSetting.quadraticCoefficients[0] * totalIntegral +
                           channelSetting.quadraticCoefficients[1]) * totalIntegral +
                          channelSetting.quadraticCoefficients[2];
-            if (psdRatio < tmp)
+            if (tailIntegral < tmp)
             {
                 isGood = false; // gamma pulses
             }

@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:40:21
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-09-08 17:04:45
+ * @LastEditTime: 2022-01-13 16:07:27
 -->
 
 ## Structure
@@ -67,7 +67,7 @@ The json file consits of two parts:
     - `LowerThreshold`: lower tail-total ratio threshold for lazy PSD cut.
     - `UpperThreshold`: upper tail-total ratio threshold for lazy PSD cut.
     - `QuadraticCut`: perform quadratic PSD cut if true. Reject pulses below the quadratic PSD line.
-    - `QuadracticCoefficients`:  quadratic PSD line coefficients in order of quadratic coefficient, the linear coefficient and the constant or free term.
+    - `QuadracticCoefficients`:  quadratic PSD line coefficients in order of quadratic coefficient, the linear coefficient and the constant or free term. Tail = [0] * Total^2 + [1] * Total + [2]
 
 - `Timing`: calculate pulse arrival time
     - `ON`: enable timing if true.
