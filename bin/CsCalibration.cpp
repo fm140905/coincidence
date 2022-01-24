@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-12-29 10:35:01
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-12-29 10:35:01
+ * @LastEditTime: 2022-01-24 14:11:04
  */
 #include <fstream>
 #include <chrono>
@@ -35,6 +35,13 @@ int compareSpectra(const std::shared_ptr<Channel> channel, const std::pair<doubl
 
 int main(int argc, char** argv)
 {
+    // create output directory
+    struct stat st = {0};
+    // create directories to save the output files and pics
+    std::string outdir = "CsCalibration_output";
+    if (stat(outdir.c_str(), &st) == -1) {
+        mkdir(outdir.c_str(), 0700);
+    }
     // supress root mesg
     gErrorIgnoreLevel = kWarning;
     // set stat box positions
@@ -62,9 +69,14 @@ int main(int argc, char** argv)
         std::pair<double, double> comptonedge_ph;
         std::pair<double, double> comptonedge_pi;
         channelI->loadEvents();
-        std::string plotname;
         std::string outname;
+        // save pulse heights and pulse integrals
+        outname = outdir + "/PH_channel " + std::to_string(chseti.channelNumber);
+        channelI->savePH(outname);
+        outname = outdir + "/PI_channel " + std::to_string(chseti.channelNumber);
+        channelI->savePI(outname);
 
+        std::string plotname;
         plotname = "Channel " + std::to_string(chseti.channelNumber);
         TCanvas canvasCHI(plotname.c_str(), plotname.c_str(), 200, 10, 800, 800);
         canvasCHI.Divide(2, 2);
@@ -77,7 +89,7 @@ int main(int argc, char** argv)
             channelI->getPHD(plotname);
             // draw spectrum and edge
             comptonedge_ph = find_compton_edge(channelI->PHD);
-            std::cout << " Calibration coefficient for PHD is: " << 478.0 / comptonedge_ph.first << " keVee/V" << std::endl;
+            std::cout << "Compton edge of PHD is " << comptonedge_ph.first << " V, calibration coefficient for PHD is: " << 478.0 / comptonedge_ph.first << " keVee/V" << std::endl;
             drawSpectrumWithEdge(channelI->PHD, comptonedge_ph);
         }
 
@@ -88,7 +100,7 @@ int main(int argc, char** argv)
             plotname = "PID_channel " + std::to_string(chseti.channelNumber);
             channelI->getPID(plotname);
             comptonedge_pi = find_compton_edge(channelI->PID);
-            std::cout << " Calibration coefficient for PID is: " << 478.0 / comptonedge_pi.first << " keVee/(V*ns/dt)" << std::endl;
+            std::cout << "Compton edge of PID is " << comptonedge_pi.first << " V*ns/dt, calibration coefficient for PID is: " << 478.0 / comptonedge_pi.first << " keVee/(V*ns/dt)" << std::endl;
             drawSpectrumWithEdge(channelI->PID, comptonedge_pi);
         }
 
@@ -137,7 +149,7 @@ std::pair<double, double> find_compton_edge(const TH1D& histo)
 
     // smooth
     TGraphSmooth *gs = new TGraphSmooth("normal");
-    TGraph* smoothGraph = gs->SmoothLowess(&graph, "", 0.2, 1);
+    TGraph* smoothGraph = gs->SmoothLowess(&graph, "", 0.1, 1);
 
     // find range of Compton edge
     // 1st derivative pattern: -, -, -, +
