@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:24:22
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-06 17:11:43
+ * @LastEditTime: 2022-02-28 20:56:40
 -->
 ## Compile
 - Install `root`(v6.20 or above), `cmake` and `git`.
@@ -36,6 +36,7 @@
     - Differences of arrival times (TOF) are saved for each channel.
 
 ## Run
+ It's important that you set the correct CoMPASS version in the json input file because the binary data saved by CoMPASS V1 and V2 have different formats.
 ### Calibration
 - Copy the executable `CsCalibration` and input file `CsCalibration.json` in `bin` folder to your working directory.
 - Edit the settings in `CsCalibration.json`. Explanation of the parameters can be found in `Inuput file explained.md`.

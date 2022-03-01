@@ -35,7 +35,8 @@ int Channel::loadEvents()
     {
         std::cout << " Reading data: " << std::endl;
     }
-    
+    if(channelSetting.CoMPASSVersion == 2)
+        fileptr.ignore(2); // ignore the first 2 bytes of the file
     ULong64_t bufIndex = 0;
     while (!fileptr.eof() && currentNumber < channelSetting.maxNumPulses)
     {

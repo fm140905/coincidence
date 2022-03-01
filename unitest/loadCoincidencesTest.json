@@ -5,14 +5,13 @@
     {
         "Defaults":
         {
+            "CoMPASSVersion": 1,
             "MaxNumPulses": 10000,
             "Polarity": "negative",
             "Dynamicrange": 2.0,
             "TimeStep": 2,
             "Resolution": 14,
-            "Headers": [2,2,8,2,2,4,4],
             "SaveHeaders": [false, false, false, false, false, false, false],
-            "SampleSize": 2,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
             "SavePulses": 0, // number of pulses to be saved

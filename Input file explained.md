@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:40:21
  * @LastEditors: Ming Fang
- * @LastEditTime: 2022-01-13 16:07:27
+ * @LastEditTime: 2022-02-28 20:58:37
 -->
 
 ## Structure
@@ -17,14 +17,15 @@ The json file consits of two parts:
 
 ## Explanation of parameters
 ### Parsing
+- `CoMPASSVersion`: version of the CoMPASS software you used to acquire the data
 - `MaxNumPulses`: max number of pulses to process.
 - `Polarity`: PMT polarity, either `positive` or `negative`.
 
 - `Timestep`: digitizer time resolution in ns.
 - `Resolution`: digitizer ADC resolution in bits.
 
-- `Headers`: size of each header in bytes.
-- `SampleSize`: size of each waveform sample in bytes.
+<!-- - `Headers`: size of each header in bytes.
+- `SampleSize`: size of each waveform sample in bytes. -->
 
 - `Dynamicrange`: output dynamic range in volts.
 

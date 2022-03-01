@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-09-08 16:55:15
+ * @LastEditTime: 2022-02-28 20:41:09
  */
 
 #include <gtest/gtest.h>
@@ -31,10 +31,12 @@ TEST(getInputTest, getSpecificChannelSetting)
 {
     std::string f("unitest/getInputTest.json");
     const InputParameters settings(f);
-    EXPECT_EQ(settings.channelSettings.size(), 2);
+    EXPECT_EQ(settings.channelSettings.size(), 3);
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
+    const ChannelSettings& ch2 = settings.channelSettings[2];
 
+    EXPECT_EQ(ch0.CoMPASSVersion, 1);
     EXPECT_EQ(ch0.bufferSize, 512);
     EXPECT_EQ(ch0.channelNumber, 0);
     EXPECT_STREQ(ch0.path.c_str(), "test/testdata/channel0.bin");
@@ -48,11 +50,14 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_EQ(ch0.resolution, 14);
     std::vector<int> headers={2,2,8,2,2,4,4};
     EXPECT_EQ(ch0.headers.size(), headers.size());
-    EXPECT_EQ(ch0.saveHeaders.size(), headers.size());
+    EXPECT_EQ(ch0.saveHeaders.size(), 8);
     for (std::size_t i = 0; i < headers.size(); i++)
     {
         EXPECT_EQ(ch0.headers[i], headers[i]);
-        EXPECT_FALSE(ch0.saveHeaders[i]);
+        if(i != 2)
+            EXPECT_FALSE(ch0.saveHeaders[i]);
+        else
+            EXPECT_TRUE(ch0.saveHeaders[i]);
     }
     EXPECT_EQ(ch0.sampleSize, 2);
     EXPECT_EQ(ch0.length, 104);
@@ -107,6 +112,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     }
 
     // channel 1
+    EXPECT_EQ(ch1.CoMPASSVersion, 1);
     EXPECT_EQ(ch1.bufferSize, 512);
     EXPECT_STREQ(ch1.path.c_str(), "test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
@@ -118,11 +124,15 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_EQ(ch1.timestep, 2);
     EXPECT_EQ(ch1.resolution, 14);
     EXPECT_EQ(ch1.headers.size(), headers.size());
-    EXPECT_EQ(ch1.saveHeaders.size(), headers.size());
+    EXPECT_EQ(ch1.saveHeaders.size(), 8);
     for (std::size_t i = 0; i < headers.size(); i++)
     {
         EXPECT_EQ(ch1.headers[i], headers[i]);
-        EXPECT_FALSE(ch1.saveHeaders[i]);
+        if(i != 2)
+            EXPECT_FALSE(ch1.saveHeaders[i]);
+        else
+            EXPECT_TRUE(ch1.saveHeaders[i]);
+            
     }
     EXPECT_EQ(ch1.sampleSize, 2);
     EXPECT_EQ(ch1.length, 104);
@@ -160,13 +170,26 @@ TEST(getInputTest, getSpecificChannelSetting)
     {
         EXPECT_DOUBLE_EQ(ch1.quadraticCoefficients[i], coefs[i]);
     }
+
+    // channel 2
+    EXPECT_EQ(ch2.CoMPASSVersion, 2);
+    headers=std::vector<int>{2,2,8,2,2,4,1,4};
+    for (std::size_t i = 0; i < headers.size(); i++)
+    {
+        EXPECT_EQ(ch2.headers[i], headers[i]);
+        if(i!=2 && i!= 7)
+            EXPECT_FALSE(ch2.saveHeaders[i]);
+        else
+            EXPECT_TRUE(ch2.saveHeaders[i]);
+            
+    }
 }
 
 TEST(getInputTest, timingTest)
 {
     std::string f("unitest/getInputTest.json");
     const InputParameters settings(f);
-    EXPECT_EQ(settings.channelSettings.size(), 2);
+    EXPECT_EQ(settings.channelSettings.size(), 3);
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
 
@@ -209,7 +232,7 @@ TEST(getInputTest, plotPHDPID)
 {
     std::string f("unitest/getInputTest.json");
     const InputParameters settings(f);
-    EXPECT_EQ(settings.channelSettings.size(), 2);
+    EXPECT_EQ(settings.channelSettings.size(), 3);
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
     
@@ -250,7 +273,7 @@ TEST(getInputTest, plotPSD)
 {
     std::string f("unitest/getInputTest.json");
     const InputParameters settings(f);
-    EXPECT_EQ(settings.channelSettings.size(), 2);
+    EXPECT_EQ(settings.channelSettings.size(), 3);
     const ChannelSettings& ch0 = settings.channelSettings[0];
     const ChannelSettings& ch1 = settings.channelSettings[1];
 

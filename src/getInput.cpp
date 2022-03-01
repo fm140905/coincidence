@@ -15,12 +15,14 @@ int ChannelSettings::getSampleNumber()
     {
         throw std::invalid_argument(path + " does not exit.");
     }
+    if(CoMPASSVersion == 2)
+        fileptr.ignore(2); // ignore the first 2 bytes of the file
     while (!fileptr.eof())
     {
         //read header
         fileptr.ignore(std::accumulate(headers.begin(), headers.end()-1, 0));
 
-        fileptr.read((char *)&(length), headers[6]);
+        fileptr.read((char *)&(length), headers[headers.size()-1]);
         break;
     }
     fileptr.close();
@@ -69,6 +71,8 @@ InputParameters::InputParameters(const std::string fpath)
 
 int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSettings& chset)
 {
+    if (v.HasMember("CoMPASSVersion"))
+        chset.CoMPASSVersion = v["CoMPASSVersion"].GetInt();
     if (v.HasMember("Chunksize"))
         chset.bufferSize = v["Chunksize"].GetInt();
     if (v.HasMember("ChannelNumber"))
@@ -88,18 +92,28 @@ int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSetting
         chset.timestep = v["TimeStep"].GetUint();
     if (v.HasMember("Resolution"))
         chset.resolution = v["Resolution"].GetUint();
-    if (v.HasMember("Headers"))
-    {
-        chset.headers.clear();
-        for (auto& i : v["Headers"].GetArray()){
-            chset.headers.push_back(i.GetInt());
-        }
-    }
+    // if (v.HasMember("Headers"))
+    // {
+    //     chset.headers.clear();
+    //     for (auto& i : v["Headers"].GetArray()){
+    //         chset.headers.push_back(i.GetInt());
+    //     }
+    // }
     if (v.HasMember("SaveHeaders"))
     {
-        chset.saveHeaders.clear();
+        if (v["SaveHeaders"].GetArray().Size() > chset.saveHeaders.size())
+        {
+            throw std::invalid_argument("8 arguments allowed in option `SaveHeaders`, but got " 
+                                    + std::to_string(v["SaveHeaders"].GetArray().Size()));
+        }
+        int j = 0;
         for (auto& i : v["SaveHeaders"].GetArray()){
-            chset.saveHeaders.push_back(i.GetBool());
+            
+            if(i.GetBool())
+                chset.saveHeaders[j] = true;
+            else
+                chset.saveHeaders[j] = false;
+            j++;
         }
     }
     if (v.HasMember("SampleSize"))
@@ -328,6 +342,16 @@ int InputParameters::getSpecificChannelSettings()
         {
             std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << "is disabled." << std::endl;
             return 0;
+        }
+        if (channelI.CoMPASSVersion == 2)
+        {
+            channelI.headers = std::vector<int>{2, 2, 8, 2, 2, 4, 1, 4};
+        } else if (channelI.CoMPASSVersion == 1)
+        {
+            channelI.headers = std::vector<int>{2, 2, 8, 2, 2, 4, 4};
+        } else
+        {
+            throw std::invalid_argument("CoMPASS Version must be 1 or 2, but got" + std::to_string(channelI.CoMPASSVersion));
         }
         
         channelI.getSampleNumber();

@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <bitset>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -36,6 +37,7 @@ public:
      * @return int 
      */
     int getSampleNumber();
+    ushort CoMPASSVersion=1; // version of CoMPASS software
     int bufferSize=64; // size of data chunk to process, in MB
     std::string path; // path to binary file
     uint channelNumber=0; // channel number
@@ -45,7 +47,7 @@ public:
     std::string polarity="negative"; // pulse polarity, either "negative" or "positive"
     int polarityCoef=-1; // pulse polarity, either -1 or 1
     std::vector<int> headers; // size of each header in bytes
-    std::vector<bool> saveHeaders=std::vector<bool>(7, false);
+    std::bitset<8> saveHeaders; // flags to save each header
     int sampleSize=2; // size of waveform sample in bytes
     int eventSize=0; // total size of a single event in bytes
     int length=288; // number of samples in a waveform

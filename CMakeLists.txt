@@ -9,9 +9,13 @@ find_package(ROOT 6.20 CONFIG REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
+endif ()
+message(STATUS "Build type: '${CMAKE_BUILD_TYPE}'")
+
 option(ENABLE_UNIT_TESTS "Enable unit tests" ON)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
-
 if (ENABLE_UNIT_TESTS)
     # Import FetchContent module:
     include(FetchContent)

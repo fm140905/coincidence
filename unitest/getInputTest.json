@@ -5,6 +5,7 @@
     {
         "Defaults":
         {
+            "CoMPASSVersion": 1,
             "Chunksize": 512, // buffer = 512 MB
             "MaxNumPulses": 10000,
             "Polarity": "negative",
@@ -12,6 +13,7 @@
             "TimeStep": 2,
             "Resolution": 14,
             "Headers": [2,2,8,2,2,4,4],
+            "SaveHeaders": [false, false, true, false, false, false, false],
             "SampleSize": 2,
             "DCOffset": 0.2,
             "BaselineSamples": 8,
@@ -150,6 +152,13 @@
                     "ON": true,
                     "Method": "DCFD"
                 }
+            },
+            {
+                "CoMPASSVersion": 2,
+                "ChannelNumber": 2,
+                "ON": true,
+                "Path": "test/testdata/channel2_CoMPASSV2.BIN",
+                "SaveHeaders": [false, false, true, false, false, false, false, true]
             }
         ]
     },
