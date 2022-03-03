@@ -14,7 +14,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif ()
 message(STATUS "Build type: '${CMAKE_BUILD_TYPE}'")
 
-option(ENABLE_UNIT_TESTS "Enable unit tests" ON)
+option(ENABLE_UNIT_TESTS "Enable unit tests" OFF)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 if (ENABLE_UNIT_TESTS)
     # Import FetchContent module:

@@ -340,8 +340,8 @@ int InputParameters::getSpecificChannelSettings()
         getChannelSetting(channelSpecs_[i], channelI);
         if (!channelI.processOutput)
         {
-            std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << "is disabled." << std::endl;
-            return 0;
+            std::cout << "Warning: Pulse processing of channel " << channelI.channelNumber << " is disabled." << std::endl;
+            continue;
         }
         if (channelI.CoMPASSVersion == 2)
         {
