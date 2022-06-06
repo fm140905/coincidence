@@ -22,6 +22,7 @@ int Channel::loadEvents()
     char * buffer = new char[bufSize]; 
 
     UInt_t currentNumber = 0;
+    double currentTimeStamp(0);
     UInt_t goodCounts = 0;
     UInt_t badCounts = 0;
     std::ifstream fileptr;
@@ -38,7 +39,7 @@ int Channel::loadEvents()
     if(channelSetting.CoMPASSVersion == 2)
         fileptr.ignore(2); // ignore the first 2 bytes of the file
     ULong64_t bufIndex = 0;
-    while (!fileptr.eof() && currentNumber < channelSetting.maxNumPulses)
+    while (!fileptr.eof() && currentNumber < channelSetting.maxNumPulses && currentTimeStamp < channelSetting.maxTimeStamp)
     {
         fileptr.read(buffer, bufSize);
         bufSize = fileptr.gcount();
@@ -47,11 +48,12 @@ int Channel::loadEvents()
         bufIndex = 0;
 
         // extract pulses
-        while (bufIndex < bufSize && currentNumber < channelSetting.maxNumPulses)
+        while (bufIndex < bufSize && currentNumber < channelSetting.maxNumPulses && currentTimeStamp < channelSetting.maxTimeStamp)
         {
             Event newPulse(channelSetting);
             newPulse.parse(buffer, bufIndex, voltage);
             currentNumber++;
+            currentTimeStamp = double(newPulse.timeStampHeader) / 1e12;
             if (newPulse.isGood)
             {
                 goodCounts++;
@@ -75,7 +77,8 @@ int Channel::loadEvents()
         }
         std::cout << " Total counts = " << currentNumber << '\t'
                   << " good counts = " << goodCounts << '\t'
-                  << " rejected counts = " << badCounts << '\n';
+                  << " rejected counts = " << badCounts << '\t'
+                  << " timestamp = " << currentTimeStamp << '\n';
     }
     fileptr.close();
 

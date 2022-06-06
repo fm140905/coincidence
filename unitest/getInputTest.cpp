@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2022-02-28 20:41:09
+ * @LastEditTime: 2022-06-06 14:19:03
  */
 
 #include <gtest/gtest.h>
@@ -42,6 +42,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_STREQ(ch0.path.c_str(), "test/testdata/channel0.bin");
     EXPECT_TRUE(ch0.processOutput);
     EXPECT_EQ(ch0.maxNumPulses, 100);
+    EXPECT_DOUBLE_EQ(ch0.maxTimeStamp, 123456.7891011);
     EXPECT_EQ(ch0.channelNumber, 0);
     EXPECT_STREQ(ch0.polarity.c_str(), "positive");
 
@@ -117,6 +118,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_STREQ(ch1.path.c_str(), "test/testdata/channel1.bin");
     EXPECT_TRUE(ch1.processOutput);
     EXPECT_EQ(ch1.maxNumPulses, 10000);
+    EXPECT_DOUBLE_EQ(ch0.maxTimeStamp, 123456.7891011);
     EXPECT_EQ(ch1.channelNumber, 1);
     EXPECT_STREQ(ch1.polarity.c_str(), "negative");
     

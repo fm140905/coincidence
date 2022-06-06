@@ -84,6 +84,8 @@ int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSetting
     
     if (v.HasMember("MaxNumPulses"))
         chset.maxNumPulses = v["MaxNumPulses"].GetUint64();
+    if (v.HasMember("MaxTimeStamp"))
+        chset.maxTimeStamp =v["MaxTimeStamp"].GetDouble();
     if (v.HasMember("Polarity"))
         chset.polarity = v["Polarity"].GetString();
     if (v.HasMember("Dynamicrange"))

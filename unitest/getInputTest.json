@@ -8,6 +8,7 @@
             "CoMPASSVersion": 1,
             "Chunksize": 512, // buffer = 512 MB
             "MaxNumPulses": 10000,
+            "MaxTimeStamp": 123456.7891011,
             "Polarity": "negative",
             "Dynamicrange": 2.0,
             "TimeStep": 2,

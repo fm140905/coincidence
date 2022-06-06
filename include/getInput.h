@@ -44,6 +44,7 @@ public:
     bool processOutput=false; // enable processing if true
     
     ULong64_t maxNumPulses=-1; // max number of pulses to process
+    double maxTimeStamp=std::numeric_limits<double>::max(); // max time stamp allowed, seconds
     std::string polarity="negative"; // pulse polarity, either "negative" or "positive"
     int polarityCoef=-1; // pulse polarity, either -1 or 1
     std::vector<int> headers; // size of each header in bytes

@@ -7,6 +7,7 @@
         {
             "CoMPASSVersion": 1,
             "MaxNumPulses": 10000,
+            "MaxTimeStamp": 100000000,
             "Polarity": "negative",
             "Dynamicrange": 2.0,
             "TimeStep": 2,
