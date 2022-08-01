@@ -2,8 +2,8 @@
  * @Description: Input options
  * @Author: Ming Fang
  * @Date: 2021-04-06 15:40:21
- * @LastEditors: Ming Fang
- * @LastEditTime: 2022-02-28 20:58:37
+ * @LastEditors: Ming Fang mingf2@illinois.edu
+ * @LastEditTime: 2022-07-31 23:06:54
 -->
 
 ## Structure
@@ -17,8 +17,9 @@ The json file consits of two parts:
 
 ## Explanation of parameters
 ### Parsing
-- `CoMPASSVersion`: version of the CoMPASS software you used to acquire the data
-- `MaxNumPulses`: max number of pulses to process.
+- `CoMPASSVersion`: version of the CoMPASS software you used to acquire the data.
+- `MaxNumPulses`: max number of pulses to process. Run is stopped once current pulse number exceeds this number.
+- `MaxTimeStamp`: max timestamp allowed. Run is stopped once current pulse timestamp exceeds this number.
 - `Polarity`: PMT polarity, either `positive` or `negative`.
 
 - `Timestep`: digitizer time resolution in ns.
