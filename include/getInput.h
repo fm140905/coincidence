@@ -60,6 +60,7 @@ public:
     bool reversebaseline=false; // baseline location, head or tail of the pulse
     double dcOffset=0.1; // DC offset
     int savePulses=1; // number of pulses to be saved
+    int savePiledupPulses=1; // number of piledup pulses to be saved
 
     int preTrig=4; // CoMPASS PreTrigger, in ns
     int preGate=2; // CoMPASS PreGate, in ns

@@ -15,6 +15,7 @@
             "DCOffset": 0.2,
             "BaselineSamples": 8,
             "SavePulses": 0, // number of pulses to be saved
+            "savePiledupPulses": 100, // number of piledup pulses to be saved
 
             "PreTrigger": 72,
             "Gates": {

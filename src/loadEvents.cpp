@@ -157,6 +157,7 @@ int Event::pileupRejection(const std::vector<Double_t>& v, const Int_t heightInd
         if (deltaV > dpf * height && deltaV > threshV)
         {
             isGood = false;
+            isPiledup = true;
             return 0;
         }
     }
@@ -167,6 +168,7 @@ int Event::pileupRejection(const std::vector<Double_t>& v, const Int_t heightInd
         if (deltaV > dpf * height && deltaV > threshV)
         {
             isGood=false;
+            isPiledup = true;
             return 0;
         }
     }

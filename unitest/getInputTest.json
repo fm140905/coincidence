@@ -20,6 +20,7 @@
             "BaselineSamples": 8,
             "BaselineLocation": "Tail", // or "Head"
             "SavePulses": 0,
+            "savePiledupPulses": 0, // number of piledup pulses to be saved
 
             "PreTrigger": 48,
             "Gates": {

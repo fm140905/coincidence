@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-26 20:12:42
  * @LastEditors: Ming Fang
- * @LastEditTime: 2022-06-06 14:19:03
+ * @LastEditTime: 2022-12-05 12:50:04
  */
 
 #include <gtest/gtest.h>
@@ -76,6 +76,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     }
     
     EXPECT_EQ(ch0.savePulses, 0);
+    EXPECT_EQ(ch0.savePiledPulses, 0);
 
     EXPECT_EQ(ch0.preTrig, 24);
     EXPECT_EQ(ch0.preGate, 0);
@@ -141,6 +142,7 @@ TEST(getInputTest, getSpecificChannelSetting)
     EXPECT_DOUBLE_EQ(ch1.dcOffset, 0.2);
     EXPECT_EQ(ch1.offset, 8);
     EXPECT_EQ(ch1.savePulses, 0);
+    EXPECT_EQ(ch0.savePiledPulses, 0);
 
     EXPECT_EQ(ch1.preTrig, 24);
     EXPECT_EQ(ch1.preGate, 14);

@@ -103,6 +103,8 @@ public:
     Double_t tailIntegral = 0;
     // True if event is rejected.
     Bool_t isGood = true;
+    // True is event is piledup
+    Bool_t isPiledup = false;
     /**
      * @brief Construct a new Event object.
      * 

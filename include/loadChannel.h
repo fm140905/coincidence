@@ -155,6 +155,8 @@ public:
     std::vector<std::vector<double_t>> goodPulses;
     // Holds a number of bad pulses for plotting or exporting.
     std::vector<std::vector<double_t>> badPulses;
+    // Holds a number of piledup pulses for plotting or exporting.
+    std::vector<std::vector<double_t>> piledupPulses;
     // Graph showing the good pulses.
     TMultiGraph goodPulseGraph;
     /**
@@ -220,6 +222,7 @@ public:
 
     int saveGoodPulses(const std::string& filename);
     int saveBadPulses(const std::string& filename);
+    int savePiledupPulses(const std::string& filename);
     int savePH(const std::string& filename);
     int savePI(const std::string& filename);
     int saveTimeStamp(const std::string& filename);

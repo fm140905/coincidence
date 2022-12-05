@@ -25,6 +25,7 @@ int Channel::loadEvents()
     double currentTimeStamp(0);
     UInt_t goodCounts = 0;
     UInt_t badCounts = 0;
+    UInt_t piledupCounts = 0;
     std::ifstream fileptr;
     fileptr.open(channelSetting.path, std::ios::in | std::ios::binary);
     std::cout << "Open file: " << channelSetting.path << std::endl;
@@ -72,6 +73,14 @@ int Channel::loadEvents()
                     badCounts <= channelSetting.savePulses)
                 {
                     badPulses.push_back(voltage);
+                }
+                if (newPulse.isPiledup)
+                {
+                    piledupCounts ++;
+                    if (piledupCounts <= channelSetting.savePiledupPulses)
+                    {
+                        piledupPulses.push_back(voltage);
+                    }
                 }
             }
         }
@@ -490,6 +499,28 @@ int Channel::saveBadPulses(const std::string& filename)
         for (std::size_t j = 0; j < channelSetting.length; j++)
         {
             outf << badPulses[i][j] << '\t';
+        }
+        outf << '\n';
+    }
+    outf.close();
+
+    return 0;
+}
+int Channel::savePiledupPulses(const std::string& filename)
+{
+    std::ofstream outf;
+    outf.open(filename);
+    if (!outf.good())
+    {
+        throw std::invalid_argument(filename + "cannot be written to.");
+    }
+    
+    const uint outN = (channelSetting.savePiledupPulses < piledupPulses.size()) ? channelSetting.savePiledupPulses : piledupPulses.size();
+    for (std::size_t i = 0; i < outN; i++)
+    {
+        for (std::size_t j = 0; j < channelSetting.length; j++)
+        {
+            outf << piledupPulses[i][j] << '\t';
         }
         outf << '\n';
     }

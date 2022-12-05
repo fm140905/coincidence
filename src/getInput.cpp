@@ -135,6 +135,8 @@ int InputParameters::getChannelSetting(const rapidjson::Value& v, ChannelSetting
     }
     if (v.HasMember("SavePulses"))
         chset.savePulses = v["SavePulses"].GetInt();
+    if (v.HasMember("savePiledupPulses"))
+        chset.savePiledupPulses = v["savePiledupPulses"].GetInt();
 
     if (v.HasMember("PreTrigger"))
         chset.preTrig = v["PreTrigger"].GetInt();

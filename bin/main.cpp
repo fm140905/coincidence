@@ -3,7 +3,7 @@
  * @Author: Ming Fang
  * @Date: 2021-03-30 16:13:41
  * @LastEditors: Ming Fang
- * @LastEditTime: 2021-04-06 16:39:57
+ * @LastEditTime: 2022-12-05 12:48:18
  */
 
 #include <fstream>
@@ -140,7 +140,12 @@ int main(int argc, char** argv)
             outname = "output/Rejected pulses_channel "+ std::to_string(chseti.channelNumber);
             channelI->saveBadPulses(outname);
         }
-        
+
+        if (chseti.savePiledupPulses)
+        {
+            outname = "output/Piledup pulses_channel "+std::to_string(chseti.channelNumber);
+            channelI->savePiledupPulses(outname);
+        }
 
         outname = "output/PH_channel " + std::to_string(chseti.channelNumber);
         channelI->savePH(outname);
