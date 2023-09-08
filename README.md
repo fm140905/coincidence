@@ -63,3 +63,19 @@
         Display results, including pulses, spectra, and PSD.
     ```
 - Output are saved in text files in `output` directory.
+
+## Extra
+Please cite our paper if you use the code in this repository:
+
+```
+@article{FANG2019162507,
+title = {Positron annihilation lifetime spectroscopy using fast scintillators and digital electronics},
+journal = {Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment},
+volume = {943},
+pages = {162507},
+year = {2019},
+issn = {0168-9002},
+doi = {https://doi.org/10.1016/j.nima.2019.162507},
+url = {https://www.sciencedirect.com/science/article/pii/S0168900219310460},
+author = {M. Fang and N. Bartholomew and A. {Di Fulvio}}}
+```
